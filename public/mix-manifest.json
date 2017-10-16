@@ -1,0 +1,12 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/visitas.js": "/js/visitas.js",
+    "/js/usuarios.js": "/js/usuarios.js",
+    "/js/roles.js": "/js/roles.js",
+    "/js/permisos.js": "/js/permisos.js",
+    "/js/lideres.js": "/js/lideres.js",
+    "/js/infoelectoral.js": "/js/infoelectoral.js",
+    "/js/corporaciones.js": "/js/corporaciones.js",
+    "/js/compromisos.js": "/js/compromisos.js"
+}

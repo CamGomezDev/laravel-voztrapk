@@ -1,0 +1,17 @@
+body {
+	background: #f4f4f4;
+}
+
+
+path:hover {
+	stroke-width: 1.2!important;
+	fill: #2665e2!important;
+	transition: fill 0.2s, stroke-width 0.0s;
+}
+
+.style-one {
+  border: 0;
+  height: 1px;
+  background: #333;
+  background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
