@@ -27,11 +27,13 @@ class MapaController extends Controller
       $municipio = null;
     }
 
-    $municipios = DB::select(DB::raw("SELECT MAX(fila_electorals.anio) anio, ANY_VALUE(fila_electorals.votoscandidato) votoscandidato,
-                                        ANY_VALUE(fila_electorals.votospartido) votospartido, fila_electorals.id_municipio, municipios.nombre municipio
-                                      FROM fila_electorals
-                                      INNER JOIN municipios ON fila_electorals.id_municipio = municipios.id
-                                      GROUP BY fila_electorals.id_municipio"));
+    // $municipios = DB::select(DB::raw("SELECT MAX(fila_electorals.anio) anio, fila_electorals.votoscandidato votoscandidato,
+    //                                     fila_electorals.votospartido votospartido, fila_electorals.id_municipio, municipios.nombre municipio
+    //                                   FROM fila_electorals
+    //                                   INNER JOIN municipios ON fila_electorals.id_municipio = municipios.id
+    //                                   GROUP BY fila_electorals.id_municipio"));
+
+    $municipios = ["hola", "boom"];
 
     return view('pags.mapa')->with('municipios', json_encode($municipios))
                             ->with('municipio', $municipio)
