@@ -24,24 +24,20 @@ class VisitasController extends AdministracionController
     if ($request->has('q')) {
       $q = $request->get('q');
       $municipios = Municipio::where('nombre', 'LIKE', '%'.$q.'%')
+                             ->has('visitas')
                              ->orderBy('nombre')->paginate($rows);
-      
-      $totRows = Corporacion::where('nombre', 'LIKE', '%'.$q.'%')->count();
+      $totRows = Municipio::where('nombre', 'LIKE', '%'.$q.'%')->count();
     } else {
-      $municipios = Municipio::orderBy('nombre')->paginate($rows);
-      $totRows    = Municipio::count();
+      $municipios = Municipio::orderBy('nombre')
+                             ->has('visitas')
+                             ->paginate($rows);
+      $totRows    = Municipio::has('visitas')->count();
     }
 
-    foreach($municipios as $municipio) {
-      $visitas = Visita::orderBy('llegada', 'desc')->where('id_municipio', '=', $municipio->id)->paginate(5);
-      $municipio->visitas = 
-    }
+    $municipiosInput = Municipio::orderBy('nombre')->pluck('nombre', 'id');
 
-    // foreach ($municipios as $municipio) {
-    //   $visitas = $visi
-    // }
-    // dd($filasElectorales);
     return view('pags.administracion.visitas')->with('municipios', $municipios)
+                                              ->with('municipiosInput', $municipiosInput)
                                               ->with('rows', $rows)
                                               ->with('totRows', $totRows);
   }
@@ -55,15 +51,21 @@ class VisitasController extends AdministracionController
   public function store(Request $request)
   {
     $this->validate($request, [
-      'nombre' => 'required'
+      'notas' => 'required',
+      'llegada' => 'required',
+      'salida' => 'required',
+      'id_municipio' => 'required'
     ]);
 
-    $corporacion = new Corporacion;
-    $corporacion->nombre = $request->input('nombre');
+    $visita = new Visita;
+    $visita->notas         = $request->input('notas');
+    $visita->llegada       = $request->input('llegada');
+    $visita->salida        = $request->input('salida');
+    $visita->id_municipio  = $request->input('id_municipio');
 
-    $corporacion->save();
+    $visita->save();
 
-    return redirect('/Administracion/Corporaciones')->with('success', 'Corporación creada');
+    return redirect('/Administracion/Visitas')->with('success', 'Visita añadida');
   }
 
   /**
@@ -76,16 +78,21 @@ class VisitasController extends AdministracionController
   public function update(Request $request)
   {
     $this->validate($request, [
-      'nombre' => 'required'
+      'notas' => 'required',
+      'llegada' => 'required',
+      'salida' => 'required',
+      'id_municipio' => 'required'
     ]);
 
-    $corporacion = Corporacion::find($request->input('id'));
+    $visita = Visita::find($request->input('id'));
+    $visita->notas         = $request->input('notas');
+    $visita->llegada       = $request->input('llegada');
+    $visita->salida        = $request->input('salida');
+    $visita->id_municipio  = $request->input('id_municipio');
 
-    $corporacion->nombre = $request->input('nombre');
+    $visita->save();
 
-    $corporacion->save();
-
-    return redirect($request->input('ruta'))->with('success', 'Corporación actualizada');
+    return redirect($request->input('ruta'))->with('success', 'Visita actualizada');
   }
 
   /**
@@ -96,9 +103,9 @@ class VisitasController extends AdministracionController
     */
   public function destroy(Request $request)
   {
-    $corporacion = Corporacion::find($request->input('id'));
-    $corporacion->delete();
+    $visita = Visita::find($request->input('id'));
+    $visita->delete();
 
-    return redirect($request->input('ruta'))->with('success', 'Compromiso eliminado');
+    return redirect($request->input('ruta'))->with('success', 'Visita eliminada');
   }
 }

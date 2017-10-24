@@ -8364,6 +8364,11 @@ td {
   text-align: center;
 }
 
+.btn:focus {
+  outline: none;
+  background: none;
+}
+
 .active-sidebar {
   background: #EEEEEE;
 }

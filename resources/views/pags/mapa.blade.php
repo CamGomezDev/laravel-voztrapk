@@ -2,12 +2,6 @@
 
 @section('content')
 
-<script type="text/javascript">
-  var municipiosDatos = {!!$municipios!!};
-  var munSelec = <?php echo ($idmun) ? $idmun : 0 ?>;
-</script>
-
-
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-body">
@@ -57,6 +51,55 @@
       <div id="tablaVLideres" class="row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="pagVLideres" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
 
+      <hr class="style-one" style="margin: 15px 0px 15px 0px">
+      <div class="row" style="margin-left: 0px; margin-right: 0px">
+        <div class="well well-md" data-toggle="collapse" style="margin-bottom:0px" href="#collapse{{$municipio->id}}">
+          <h4 style="margin: 0px 15px 0px 15px">
+            {{$municipio->nombre}} - Visitas: {{(count($municipio->visitas)) ? count($municipio->visitas) : 0}}
+            <a class="pull-right" href="#"><i class="pull-right fa fa-sort-desc" aria-hidden="true"></i></a>
+          </h4>
+          <div class="table-responsive collapse" id="collapse{{$municipio->id}}" style="margin-top:15px">
+            <table class="table table-striped table-bordered" style="margin-bottom: 0px">
+              <thead>
+                <tr>
+                  <th>Notas</th>
+                  <th>LLegada</th>
+                  <th>Salida</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+              @if(count($municipio->visitas) > 0)
+                @foreach($municipio->visitas as $visita)
+                <tr>
+                  <td>{{$visita->notas}}</td>
+                  <td>{{$visita->llegada}}</td>
+                  <td>{{$visita->salida}}</td>
+                  <td style="text-align: center">
+                    <h4 style="margin: 0;">
+                      <a type="button" data-toggle="modal" data-target="#ModalActualizar"
+                        data-id=          "{{$visita->id}}"
+                        data-notas=       "{{$visita->notas}}"
+                        data-llegada=     "{{$visita->llegada}}"
+                        data-salida=      "{{$visita->salida}}"
+                        data-id_municipio="{{$visita->id_municipio}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
+                      <a type="button" data-toggle="modal" data-target="#ModalEliminar" data-id="{{$visita->id}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                    </h4>
+                  </td>
+                </tr>
+                @endforeach
+              @else
+                <tr>
+                  <td colspan=4>No se encontraron resultados</td>
+                </tr>
+              @endif
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="pagVLideres" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
+
       <div class="fixed-table-pagination">
 
       </div>
@@ -69,6 +112,11 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  var municipiosDatos = {!!$municipios!!};
+  var munSelec = <?php echo ($idmun) ? $idmun : 0 ?>;
+</script>
 
 <script type="text/javascript" src="{{asset('js/mapa.js')}}"></script>
 

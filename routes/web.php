@@ -19,6 +19,8 @@ Route::get('/Mapa/busquedaSVG', 'MapaController@busquedaSVG');
 Route::get('/Mapa/resumen', 'MapaController@resumen');
 Route::post('/Mapa/poblacion', 'MapaController@poblacion');
 
+Route::get('/Subregiones/{id}', 'SubregionesController@index');
+
 Route::get('/Administracion', function () {
   return view('pags.administracion');
 })->middleware('auth', 'rol:1,3');
@@ -66,6 +68,7 @@ Route::get('/ExportarFilasElectorales', 'ExportExcelController@filasElectorales'
 Route::get('/ExportarLideres', 'ExportExcelController@lideres');
 Route::get('/ExportarCompromisos', 'ExportExcelController@compromisos');
 Route::get('/ExportarCorporaciones', 'ExportExcelController@corporaciones');
+Route::get('/ExportarVisitas', 'ExportExcelController@visitas');
 Route::get('/ExportarUsuarios', 'ExportExcelController@usuarios');
 Route::get('/ExportarRoles', 'ExportExcelController@roles');
 Route::post('/Importar/{cosa}', 'ImportExcelController@importar');

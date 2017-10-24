@@ -21,8 +21,10 @@ class MapaController extends Controller
   public function index (Request $request) {
     if ($request->has('m')) {
       $id = $request->get('m');
+      $municipio = Municipio::find($id);
     } else {
       $id = false;
+      $municipio = null;
     }
 
     $municipios = DB::select(DB::raw("SELECT MAX(fila_electorals.anio) anio, ANY_VALUE(fila_electorals.votoscandidato) votoscandidato,
@@ -32,6 +34,7 @@ class MapaController extends Controller
                                       GROUP BY fila_electorals.id_municipio"));
 
     return view('pags.mapa')->with('municipios', json_encode($municipios))
+                            ->with('municipio', $municipio)
                             ->with('idmun', $id);
   }
 

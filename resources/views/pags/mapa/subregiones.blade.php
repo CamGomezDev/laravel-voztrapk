@@ -62,7 +62,7 @@
       @foreach($subregiones as $subregion)
         @if($subregion->id != '1' )
         <tr>
-          <td>{{$subregion->nombre}}</td>
+          <td><a href="../Subregiones/{{$subregion->id}}">{{$subregion->nombre}}</a></td>
           <td>{{$subregion->votostotales}}</td>
           <td>{{$subregion->votoscandidato}}</td>
           <td>{{$subregion->votospartido}}</td>

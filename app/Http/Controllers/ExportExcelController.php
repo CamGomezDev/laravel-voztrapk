@@ -45,15 +45,11 @@ class ExportExcelController extends Controller
   public function corporaciones () {
   }
 
+  public function visitas () {
+    
+  }
+
   public function usuarios () {
-
-  }
-
-  public function permisos () {
-
-  }
-
-  public function tiposUsuario () {
 
   }
 

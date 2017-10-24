@@ -16,7 +16,7 @@
       <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
     {!!Form::close()!!}
     <p class="pull-right">
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalCrear">Crear {{$panelsup[3]}}</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalCrear"><i class="fa fa-plus" aria-hidden="true"></i> {{$panelsup[3]}}</button>
     </p>
   </div>
   <div class="pull-right" style="margin-right: 15px;">
