@@ -14,7 +14,7 @@ class CompromisosController extends AdministracionController
     *
     * @return \Illuminate\Http\Response
     */
-  public function index(Request $request)
+  public function index($sec, Request $request)
   {
     if ($request->has('rows')) {
       $rows = $request->get('rows');
@@ -22,10 +22,19 @@ class CompromisosController extends AdministracionController
       $rows = 5;
     }
 
+    $secNom = ($sec == 'Med') ? 'Medellín' : 'Antioquia';
+
+    if ($sec == 'Med') {
+      $secNotNull  = 'id_comuna';
+    } else {
+      $secNotNull  = 'id_municipio';
+    }
+
     if ($request->has('q')) {
       $q = $request->get('q');
-      $compromisos = Compromiso::whereHas('lider', function ($query) use ($q) {
-                                   $query->where('nombre', 'LIKE', '%'.$q.'%');
+      $compromisos = Compromiso::whereHas('lider', function ($query) use ($q,$secNotNull) {
+                                   $query->where('nombre', 'LIKE', '%'.$q.'%')
+                                         ->whereNotNull($secNotNull);
                                  })
                                ->orwhere('nombre', 'LIKE', '%'.$q.'%')
                                ->orwhere('descripcion', 'LIKE', '%'.$q.'%')
@@ -35,24 +44,32 @@ class CompromisosController extends AdministracionController
                                ->orderBy('liders.nombre')->paginate($rows);
       
       $totRows = Compromiso::whereHas('lider', function ($query) use ($q) {
-                               $query->where('nombre', 'LIKE', '%'.$q.'%');
+                               $query->where('nombre', 'LIKE', '%'.$q.'%')
+                                     ->whereNotNull($secNotNull);
                              })
                            ->orwhere('nombre', 'LIKE', '%'.$q.'%')
                            ->orwhere('descripcion', 'LIKE', '%'.$q.'%')
                            ->orwhere('cumplimiento', 'LIKE', '%'.$q.'%')
                            ->orwhere('costo', '=', $q)->count();
     } else {
-      $compromisos = Compromiso::join('liders', 'compromisos.id_lider', '=', 'liders.id')
+      $compromisos = Compromiso::whereHas('lider', function ($query) use ($secNotNull) {
+                                   $query->whereNotNull($secNotNull);
+                                 })
+                               ->join('liders', 'compromisos.id_lider', '=', 'liders.id')
                                ->select('compromisos.*')
                                ->orderBy('liders.nombre')->paginate($rows);
-      $totRows = Compromiso::count();
+      $totRows = Compromiso::whereHas('lider', function ($query) use ($secNotNull) {
+                               $query->whereNotNull($secNotNull);
+                             })->count();
     }
     // dd($filasElectorales);
-    $lideres = Lider::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+    $lideres = Lider::whereNotNull($secNotNull)->orderBy('nombre', 'asc')->pluck('nombre', 'id');
     return view('pags.administracion.compromisos')->with('compromisos', $compromisos)
-                                                    ->with('lideres', $lideres)
-                                                    ->with('rows', $rows)
-                                                    ->with('totRows', $totRows);
+                                                  ->with('lideres', $lideres)
+                                                  ->with('rows', $rows)
+                                                  ->with('totRows', $totRows)
+                                                  ->with('secNom', $secNom)
+                                                  ->with('sec', $sec);
   }
 
   /**

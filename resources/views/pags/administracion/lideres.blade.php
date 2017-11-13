@@ -20,7 +20,7 @@
             <th>Tipo de líder</th>
             <th>Activo</th>
             <th>Votos estimados</th>
-            <th>Municipio</th>
+            <th>{{($sec == 'Med') ? 'Comuna' : 'Municipio'}}</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -36,7 +36,7 @@
             <td>{{$lider->tipolider}}</td>
             <td>{{$lider->activo}}</td>
             <td>{{$lider->votosestimados}}</td>            
-            <td>{{$lider->municipio->nombre}}</td>
+            <td>{{($sec == 'Med') ? $lider->comuna->nombre : $lider->municipio->nombre}}</td>
             <td style="text-align: center">
               <h4 style="margin: 0;">
                 <a type="button" data-toggle="modal" data-target="#ModalActualizar"
@@ -49,7 +49,7 @@
                   data-tipolider=     "{{$lider->tipolider}}"
                   data-votosestimados="{{$lider->votosestimados}}"
                   data-activo=        "{{$lider->activo}}"
-                  data-id_municipio=  "{{$lider->municipio->id}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
+                  data-id_municipio=  "{{($sec == 'Med') ? $lider->comuna->id : $lider->municipio->id}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
                 <a type="button" data-toggle="modal" data-target="#ModalEliminar" data-id="{{$lider->id}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
               </h4>
             </td>
@@ -86,7 +86,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Crear Líder</h4>
       </div>
-      {!!Form::open(['action' => 'LideresController@store', 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('LideresController@store', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::label('', 'Nombre')}}
@@ -105,8 +105,8 @@
             {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['class' => 'form-control'])}}
             {{Form::label('', 'Votos estimados')}}
             {{Form::number('votosestimados', '', ['class' => 'form-control'])}}
-            {{Form::label('', 'Municipio')}}
-            {{Form::select('id_municipio', $municipios, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar municipio...'])}}
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
           </div>
         </div>
         <div class="modal-footer">
@@ -125,7 +125,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Crear Líder</h4>
       </div>
-      {!!Form::open(['action' => ['LideresController@update', 1], 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('LideresController@update', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
@@ -145,8 +145,8 @@
             {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['id' => 'activoInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Votos estimados')}}
             {{Form::text('votosestimados', '', ['id' => 'votosestimadosInput', 'class' => 'form-control'])}}
-            {{Form::label('', 'Municipio')}}
-            {{Form::select('id_municipio', $municipios, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar municipio...'])}}
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
             {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}
             {{Form::hidden('_method', 'PUT')}}
           </div>

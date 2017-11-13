@@ -1,3 +1,3 @@
-@foreach($municipios as $municipio)
-  <li><a href="../Mapa?m={{$municipio->id}}" onmouseover="resaltarMun({{$municipio->id}})" onmouseout="atenuarMun({{$municipio->id}})">{{$municipio->nombre}}</a></li>
+@foreach($cosas as $cosa)
+  <li><a href="?{{(Request::segment(2) == 'Med') ? 'c' : 'm'}}={{$cosa->id}}" onmouseover="resaltarMun({{$cosa->id}})" onmouseout="atenuarMun({{$cosa->id}})">{{$cosa->nombre}}</a></li>
 @endforeach

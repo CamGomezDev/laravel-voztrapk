@@ -21,10 +21,28 @@
             <?php $id = Auth::user()->id_rol ?>
             <ul class="nav navbar-nav">
                 @if($id == 1 || $id == 3 || $id == 4)
-                <li class="{{(Request::segment(1) == 'Mapa' || Request::segment(1) == '') ? 'active' : ''}}"><a href="/Mapa">Mapa</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Mapa <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="{{(Request::segment(1) == 'Mapa' && Request::segment(2) == 'Ant') ? 'active' : ''}}"><a href="/Mapa/Ant">Antioquia</a></li>
+                        <li class="{{(Request::segment(1) == 'Mapa' && Request::segment(2) == 'Med') ? 'active' : ''}}"><a href="/Mapa/Med">Medellín</a></li>
+                    </ul>
+                </li>
                 @endif
                 @if($id == 1 || $id == 3)
-                <li class="{{(Request::segment(1) == 'Administracion') ? 'active' : ''}}"><a href="/Administracion">Administración</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Administración <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="{{(Request::segment(1) == 'Administracion' && Request::segment(2) == 'Ant') ? 'active' : ''}}"><a href="/Administracion/Ant">Antioquia</a></li>
+                        <li class="{{(Request::segment(1) == 'Administracion' && Request::segment(2) == 'Med') ? 'active' : ''}}"><a href="/Administracion/Med">Medellín</a></li>
+                    </ul>
+                </li>
                 @endif
                 @if($id == 1 || $id == 2)
                 <li class="{{(Request::segment(1) == 'Ajustes') ? 'active' : ''}}"><a href="/Ajustes">Ajustes</a></li>

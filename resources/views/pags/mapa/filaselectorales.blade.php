@@ -6,11 +6,11 @@
         <input type="hidden" name="municid" value="">
         <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
-      &nbspInformación Electoral - {{$municipio->nombre}} - Subregión: {{$subregion}} - Población: {{($municipio->poblacion) ? $municipio->poblacion : 0}}
+      &nbspInformación Electoral - {{$cosafrase}}
     </h4>
     <div class="vcenter-parent pull-right" style="margin-left:auto;">
       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalPoblacion"
-        data-id="{{$municipio->id}}" data-poblacion="{{$municipio->poblacion}}">Editar</button>
+        data-id="{{$cosa->id}}" data-poblacion="{{$cosa->poblacion}}">Editar</button>
     </div>
   </div>
   <div class="table-responsive">
@@ -28,7 +28,7 @@
       <tbody>
       @if(!(sizeof($filasElectorales)))
         <tr>
-          <td colspan=6>Este municipio no tiene información electoral</td>
+          <td colspan=6>Este lugar no tiene información electoral</td>
         </tr>
       @endif
       @foreach($filasElectorales as $filaElectoral)
@@ -56,13 +56,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Población de {{$municipio->nombre}}</h4>
+          <h4 class="modal-title">Población de {{$cosa->nombre}}</h4>
         </div>
-        {!!Form::open(['action' => 'MapaController@poblacion', 'method' => 'POST'])!!}
+        {!!Form::open(['action' => 'MapaAntController@poblacion', 'method' => 'POST'])!!}
           <div class="modal-body">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
             {{Form::number('poblacion', '', ['id' => 'poblacionInput', 'class' => 'form-control'])}}
-            {{Form::hidden('ruta', "Mapa?m=".$municipio->id)}}
+            {{Form::hidden('ruta', "Mapa?m=".$cosa->id)}}
           </div>
           <div class="modal-footer">
             {{Form::submit('Cambiar', ['class' => 'btn btn-danger'])}}

@@ -13,7 +13,7 @@ class CorporacionesController extends AdministracionController
     *
     * @return \Illuminate\Http\Response
     */
-  public function index(Request $request)
+  public function index($sec, Request $request)
   {
     if ($request->has('rows')) {
       $rows = $request->get('rows');
@@ -34,7 +34,9 @@ class CorporacionesController extends AdministracionController
     // dd($filasElectorales);
     return view('pags.administracion.corporaciones')->with('corporaciones', $corporaciones)
                                                     ->with('rows', $rows)
-                                                    ->with('totRows', $totRows);
+                                                    ->with('totRows', $totRows)
+                                                    ->with('secNom', 'Todos')
+                                                    ->with('sec', $sec);
   }
 
   /**

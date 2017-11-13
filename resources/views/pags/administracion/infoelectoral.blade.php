@@ -12,7 +12,7 @@
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">
         <thead>
           <tr>
-            <th>Municipio</th>
+            <th>{{($sec == 'Med') ? 'Comuna' : 'Municipio'}}</th>
             <th>Corporación</th>
             <th>Votos totales</th>
             <th>Votos candidato</th>
@@ -26,8 +26,8 @@
         @if($totRows > 0)
           @foreach($filasElectorales as $filaElectoral)
           <tr>
-            <td>{{$filaElectoral->municipio->nombre}}</td>
-            <td>{{$filaElectoral->corporacion->id}}</td>
+            <td>{{($sec == 'Med') ? $filaElectoral->comuna->nombre : $filaElectoral->municipio->nombre}}</td>
+            <td>{{$filaElectoral->corporacion->nombre}}</td>
             <td>{{$filaElectoral->votostotales}}</td>
             <td>{{$filaElectoral->votoscandidato}}</td>
             <td>{{$filaElectoral->votospartido}}</td>
@@ -37,7 +37,7 @@
               <h4 style="margin: 0;">
                 <a type="button" data-toggle="modal" data-target="#ModalActualizar"
                   data-id=                "{{$filaElectoral->id}}"
-                  data-id_municipio=      "{{$filaElectoral->municipio->id}}"
+                  data-id_municipio=      "{{($sec == 'Med') ? $filaElectoral->comuna->id : $filaElectoral->municipio->id}}"
                   data-id_corporacion=    "{{$filaElectoral->corporacion->id}}"
                   data-votostotales=      "{{$filaElectoral->votostotales}}"
                   data-votoscandidato=    "{{$filaElectoral->votoscandidato}}"
@@ -80,11 +80,11 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Crear Fila Electoral</h4>
       </div>
-      {!!Form::open(['action' => 'FilasElectoralesController@store', 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('FilasElectoralesController@store', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
-            {{Form::label('', 'Municipio')}}
-            {{Form::select('id_municipio', $municipios, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar municipio...'])}}
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
             {{Form::label('', 'Corporación')}}
             {{Form::select('id_corporacion', $corporaciones, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar corporación...'])}}
             {{Form::label('', 'Votos totales')}}
@@ -115,12 +115,12 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Actualizar Fila Electoral</h4>
       </div>
-      {!!Form::open(['action' => ['FilasElectoralesController@update', 1], 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('FilasElectoralesController@update', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
-            {{Form::label('', 'Municipio')}}
-            {{Form::select('id_municipio', $municipios, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar municipio...'])}}
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.($sec == 'Med') ? 'comuna' : 'municipio'.'...'])}}
             {{Form::label('', 'Corporación')}}
             {{Form::select('id_corporacion', $corporaciones, null, ['id' => 'id_corporacionInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar corporación...'])}}
             {{Form::label('', 'Votos totales')}}

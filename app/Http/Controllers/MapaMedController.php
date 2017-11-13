@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Municipio;
+use App\Comuna;
 use App\Subregion;
 use App\FilaElectoral;
 use App\Lider;
@@ -11,7 +12,7 @@ use App\Compromiso;
 use App\Corporacion;
 use DB;
 
-class MapaController extends Controller
+class MapaMedController extends Controller
 {
   public function __construct () {
     $this->middleware('auth');
@@ -19,25 +20,34 @@ class MapaController extends Controller
   }
 
   public function index (Request $request) {
-    if ($request->has('m')) {
-      $id = $request->get('m');
-      $municipio = Municipio::find($id);
+    if ($request->has('c')) {
+      $id = $request->get('c');
+      $comunaAc = Comuna::find($id);
     } else {
       $id = false;
-      $municipio = null;
+      $comunaAc = null;
     }
 
-    // $municipios = DB::select(DB::raw("SELECT MAX(fila_electorals.anio) anio, fila_electorals.votoscandidato votoscandidato,
-    //                                     fila_electorals.votospartido votospartido, fila_electorals.id_municipio, municipios.nombre municipio
-    //                                   FROM fila_electorals
-    //                                   INNER JOIN municipios ON fila_electorals.id_municipio = municipios.id
-    //                                   GROUP BY fila_electorals.id_municipio"));
+    $comunas = Comuna::select('id', 'nombre', 'mesas', 'barrios', 'puestos')->get();
 
-    $municipios = ["hola", "boom"];
+    foreach ($comunas as $comuna) {
+      if (count($comuna->fila_electorals)) {
+        $comuna->panel = 1;
+        $info = FilaElectoral::select('votospartido', 'votoscandidato')
+                             ->where('id_comuna', '=', $comuna->id)
+                             ->orderBy('anio', 'desc')
+                             ->first();
+        $comuna->votospartido   = $info->votospartido;
+        $comuna->votoscandidato = $info->votoscandidato;
+      } else {
+        $comuna->panel = 0;
+      }
+      unset($comuna->fila_electorals);
+    }
 
-    return view('pags.mapa')->with('municipios', json_encode($municipios))
-                            ->with('municipio', $municipio)
-                            ->with('idmun', $id);
+    return view('pags.mapaMed')->with('comunas', json_encode($comunas))
+                               ->with('comuna', $comunaAc)
+                               ->with('idcom', $id);
   }
 
   public function conseguir (Request $request) {
@@ -50,23 +60,24 @@ class MapaController extends Controller
       $page = 1;
     }
     if($ejecutar == 'filasElectorales' || $ejecutar == 'lideres') {
-      $municipio = Municipio::where('id', '=', $id)
-                            ->first();
-      $subregion = Subregion::where('id', '=', $municipio->id_subregion)
-                            ->first();
+      $comuna = Comuna::where('id', '=', $id)
+                      ->first();
+      
+      $cosafrase = $comuna->nombre;
     }
+
 
     switch ($ejecutar) {
       case 'filasElectorales':
-        $filasElectorales = FilaElectoral::where('id_municipio', '=', $id)
+        $filasElectorales = FilaElectoral::where('id_comuna', '=', $id)
                                          ->orderBy('anio', 'desc')
                                          ->orderBy('id_corporacion', 'desc')
                                          ->paginate($rows);
-        $totRows = FilaElectoral::where('id_municipio', '=', $id)->count();
+        $totRows = FilaElectoral::where('id_comuna', '=', $id)->count();
         $totPags = ceil($totRows/$rows);
         return view('pags.mapa.filaselectorales')->with('filasElectorales', $filasElectorales)
-                                                 ->with('municipio', $municipio)
-                                                 ->with('subregion', $subregion->nombre)
+                                                 ->with('cosa', $comuna)
+                                                 ->with('cosafrase', $cosafrase)
                                                  ->with('totPags', $totPags)
                                                  ->with('totRows', $totRows)
                                                  ->with('rows', $rows)
@@ -86,7 +97,7 @@ class MapaController extends Controller
                                     ->orwhere('activo', 'LIKE', '%'.$q.'%')
                                     ->orwhere('votosestimados', '=', $q);
                             })
-                          ->where('id_municipio', '=', $id)
+                          ->where('id_comuna', '=', $id)
                           ->orderBy('nombre', 'asc')
                           ->paginate($rows);
                           
@@ -100,17 +111,17 @@ class MapaController extends Controller
                                     ->orwhere('activo', 'LIKE', '%'.$q.'%')
                                     ->orwhere('votosestimados', '=', $q);
                             })
-                          ->where('id_municipio', '=', $id)
+                          ->where('id_comuna', '=', $id)
                           ->count();
         } else {
-          $lideres = Lider::where('id_municipio', '=', $id)
+          $lideres = Lider::where('id_comuna', '=', $id)
                           ->orderBy('nombre', 'asc')
                           ->paginate($rows);
-          $totRows = Lider::where('id_municipio', '=', $id)->count();
+          $totRows = Lider::where('id_comuna', '=', $id)->count();
         }
         $totPags = ceil($totRows/$rows);
         return view('pags.mapa.lideres')->with('lideres', $lideres)
-                                        ->with('municipio', $municipio->nombre)
+                                        ->with('cosa', $comuna->nombre)
                                         ->with('totPags', $totPags)
                                         ->with('totRows', $totRows)
                                         ->with('rows', $rows)
@@ -136,10 +147,10 @@ class MapaController extends Controller
 
   public function busquedaSVG (Request $request) {
     $texto = $request->get('palabra');
-    $municipios = Municipio::where('nombre', 'LIKE', '%'.$texto.'%')
-                           ->orderBy('nombre', 'asc')
-                           ->get();
-    return view('pags.mapa.busqSVG')->with('municipios', $municipios);
+    $comunas = Comuna::where('nombre', 'LIKE', '%'.$texto.'%')
+                     ->orderBy('nombre', 'asc')
+                     ->get();
+    return view('pags.mapa.busqSVG')->with('cosas', $comunas);
   }
 
   public function resumen (Request $request) {
@@ -166,46 +177,46 @@ class MapaController extends Controller
       $anio = $anios[0]->anio;
     }
 
-
-    $subregiones = Subregion::get();
-    foreach ($subregiones as $subregion) {
+    $comunas = Comuna::get();
+    foreach ($comunas as $comuna) {
       $resumenfilasElec = DB::select(DB::raw("SELECT
                                                 SUM(fila_electorals.votoscandidato) AS votoscandidato,
                                                 SUM(fila_electorals.votospartido) AS votospartido,
                                                 SUM(fila_electorals.votostotales) AS votostotales,
                                                 SUM(fila_electorals.potencialelectoral) AS potencialelectoral
-                                              FROM (fila_electorals JOIN
-                                                municipios ON fila_electorals.id_municipio = municipios.id
-                                              ) WHERE municipios.id_subregion = {$subregion->id} AND
+                                              FROM fila_electorals
+                                              WHERE fila_electorals.id_comuna = {$comuna->id} AND
                                                 fila_electorals.anio = {$anio} AND
                                                 fila_electorals.id_corporacion = {$idcorp}"))[0];
       $resumenVotosEsti = DB::select(DB::raw("SELECT SUM(liders.votosestimados) AS votosestimados
-                                              FROM (liders JOIN municipios ON liders.id_municipio = municipios.id)
-                                              WHERE municipios.id_subregion = {$subregion->id}"))[0];
+                                              FROM liders
+                                              WHERE liders.id_comuna = {$comuna->id}"))[0];
 
-      $subregion->votoscandidato     = ($resumenfilasElec->votoscandidato) ? $resumenfilasElec->votoscandidato : 0;
-      $subregion->votospartido       = ($resumenfilasElec->votospartido) ? $resumenfilasElec->votospartido : 0;
-      $subregion->votostotales       = ($resumenfilasElec->votostotales) ? $resumenfilasElec->votostotales : 0;
-      $subregion->potencialelectoral = ($resumenfilasElec->potencialelectoral) ? $resumenfilasElec->potencialelectoral : 0;
-      $subregion->votosestimados     = ($resumenVotosEsti->votosestimados) ? $resumenVotosEsti->votosestimados : 0;
+      $comuna->votoscandidato     = ($resumenfilasElec->votoscandidato) ? $resumenfilasElec->votoscandidato : 0;
+      $comuna->votospartido       = ($resumenfilasElec->votospartido) ? $resumenfilasElec->votospartido : 0;
+      $comuna->votostotales       = ($resumenfilasElec->votostotales) ? $resumenfilasElec->votostotales : 0;
+      $comuna->potencialelectoral = ($resumenfilasElec->potencialelectoral) ? $resumenfilasElec->potencialelectoral : 0;
+      $comuna->votosestimados     = ($resumenVotosEsti->votosestimados) ? $resumenVotosEsti->votosestimados : 0;
     }
 
     $corporaciones = Corporacion::get();
 
-    return view('pags.mapa.subregiones')->with('subregiones', $subregiones)
-                                        ->with('anio', $anio)
-                                        ->with('anios', $anios)
-                                        ->with('idcorp', $idcorpOrig)
-                                        ->with('corp', $corp)
-                                        ->with('corporaciones', $corporaciones);
+    return view('pags.mapa.comunas')->with('comunas', $comunas)
+                                    ->with('anio', $anio)
+                                    ->with('anios', $anios)
+                                    ->with('idcorp', $idcorpOrig)
+                                    ->with('corp', $corp)
+                                    ->with('corporaciones', $corporaciones);
   }
 
-  public function poblacion (Request $request) {
-    $municipio = Municipio::find($request->input('id'));
-    var_dump($request->input('id'));
-    $municipio->poblacion = $request->input('poblacion');
+  public function comuna (Request $request) {
+    $comuna = Comuna::find($request->input('id'));
 
-    $municipio->save();
+    $comuna->puestos = $request->input('puestos');
+    $comuna->barrios = $request->input('barrios');
+    $comuna->mesas   = $request->input('mesas');
+
+    $comuna->save();
 
     return redirect($request->input('ruta'));
   }

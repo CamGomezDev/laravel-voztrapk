@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Lider;
 use App\Municipio;
+use App\Comuna;
 use DB;
 
 class LideresController extends AdministracionController
@@ -14,7 +15,7 @@ class LideresController extends AdministracionController
     *
     * @return \Illuminate\Http\Response
     */
-  public function index(Request $request)
+  public function index($sec, Request $request)
   {
     if ($request->has('rows')) {
       $rows = $request->get('rows');
@@ -22,9 +23,19 @@ class LideresController extends AdministracionController
       $rows = 5;
     }
 
+    $secNom = ($sec == 'Med') ? 'Medellín' : 'Antioquia';
+
+    if ($sec == 'Med') {
+      $secWhereHas = 'comuna';
+      $secNotNull  = 'id_comuna';
+    } else {
+      $secWhereHas = 'municipio';
+      $secNotNull  = 'id_municipio';
+    }
+
     if ($request->has('q')) {
       $q = $request->get('q');
-      $lideres = Lider::whereHas('municipio', function ($query) use ($q) {
+      $lideres = Lider::whereHas($secWhereHas, function ($query) use ($q) {
                           $query->where('nombre', 'LIKE', '%'.$q.'%');
                         })
                       ->orwhere('nombre', 'LIKE', '%'.$q.'%')
@@ -38,7 +49,7 @@ class LideresController extends AdministracionController
                       ->orderBy('nombre')->paginate($rows);
       
       
-      $totRows = Lider::whereHas('municipio', function ($query) use ($q) {
+      $totRows = Lider::whereHas($secWhereHas, function ($query) use ($q) {
                           $query->where('nombre', 'LIKE', '%'.$q.'%');
                         })
                       ->orwhere('nombre', 'LIKE', '%'.$q.'%')
@@ -51,15 +62,22 @@ class LideresController extends AdministracionController
                       ->orwhere('votosestimados', '=', $q)
                       ->orderBy('nombre')->count();
     } else {
-      $lideres = Lider::orderBy('liders.nombre')->paginate($rows);
-      $totRows = Lider::count();
+      $lideres = Lider::whereNotNull($secNotNull)->orderBy('liders.nombre')->paginate($rows);
+      $totRows = Lider::whereNotNull($secNotNull)->count();
     }
     // dd($filasElectorales);
-    $municipios = Municipio::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+    if ($sec == 'Med') {
+      $seclista = Comuna::orderBy('id', 'asc')->pluck('nombre', 'id');
+    } else {
+      $seclista = Municipio::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+    }
+
     return view('pags.administracion.lideres')->with('lideres', $lideres)
-                                              ->with('municipios', $municipios)
+                                              ->with('seclista', $seclista)
                                               ->with('rows', $rows)
-                                              ->with('totRows', $totRows);
+                                              ->with('totRows', $totRows)
+                                              ->with('sec', $sec)
+                                              ->with('secNom', $secNom);
   }
 
   /**
@@ -68,7 +86,7 @@ class LideresController extends AdministracionController
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-  public function store(Request $request)
+  public function store($sec, Request $request)
   {
     $this->validate($request, [
       'nombre' => 'required',
@@ -84,11 +102,15 @@ class LideresController extends AdministracionController
     $lider->tipolider      = $request->input('tipolider');
     $lider->activo         = $request->input('activo');
     $lider->votosestimados = $request->input('votosestimados');
-    $lider->id_municipio   = $request->input('id_municipio');
+    if ($sec == 'Med') {
+      $lider->id_comuna = $request->input('id_municipio');
+    } else {
+      $lider->id_municipio = $request->input('id_municipio');
+    }
 
     $lider->save();
 
-    return redirect('/Administracion/Lideres')->with('success', 'Líder creado');
+    return redirect('/Administracion/'.$sec.'/Lideres')->with('success', 'Líder creado');
   }
 
   /**
@@ -98,7 +120,7 @@ class LideresController extends AdministracionController
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-  public function update(Request $request)
+  public function update($sec, Request $request)
   {
     $this->validate($request, [
       'nombre' => 'required',
@@ -116,10 +138,15 @@ class LideresController extends AdministracionController
     $lider->activo         = $request->input('activo');
     $lider->votosestimados = $request->input('votosestimados');
     $lider->id_municipio   = $request->input('id_municipio');
+    if ($sec == 'Med') {
+      $lider->id_comuna = $request->input('id_municipio');
+    } else {
+      $lider->id_municipio = $request->input('id_municipio');
+    }
 
     $lider->save();
 
-    return redirect('/Administracion/Lideres')->with('success', 'Líder actualizado');
+    return redirect('/Administracion/'.$sec.'/Lideres')->with('success', 'Líder actualizado');
   }
 
   /**

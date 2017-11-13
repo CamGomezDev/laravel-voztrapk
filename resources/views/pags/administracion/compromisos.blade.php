@@ -78,7 +78,7 @@
         <div class="modal-body">
           <div class="form-group">
             {{Form::label('', 'Líder')}}
-            {{Form::select('id_lider', $lideres, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar líder...'])}}
+            {{Form::select('id_lider', $lideres, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar líder en '.$secNom.'...'])}}
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Descripción')}}
@@ -110,7 +110,7 @@
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
             {{Form::label('', 'Líder')}}
-            {{Form::select('id_lider', $lideres, null, ['id' => 'id_liderInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar líder...'])}}
+            {{Form::select('id_lider', $lideres, null, ['id' => 'id_liderInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar líder'.$secNom.'...'])}}
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['id' => 'nombreInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Descripción')}}

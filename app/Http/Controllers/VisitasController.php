@@ -13,13 +13,15 @@ class VisitasController extends AdministracionController
     *
     * @return \Illuminate\Http\Response
     */
-  public function index(Request $request)
+  public function index($sec, Request $request)
   {
     if ($request->has('rows')) {
       $rows = $request->get('rows');
     } else {
       $rows = 5;
     }
+
+    $secNom = ($sec == 'Med') ? 'Antioquia (no existe un módulo de visitas para comunas)' :  'Antioquia';
 
     if ($request->has('q')) {
       $q = $request->get('q');
@@ -39,7 +41,9 @@ class VisitasController extends AdministracionController
     return view('pags.administracion.visitas')->with('municipios', $municipios)
                                               ->with('municipiosInput', $municipiosInput)
                                               ->with('rows', $rows)
-                                              ->with('totRows', $totRows);
+                                              ->with('totRows', $totRows)
+                                              ->with('secNom', $secNom)
+                                              ->with('sec', $sec);
   }
 
   /**

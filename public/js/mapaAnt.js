@@ -44,12 +44,6 @@ $(window).on("load", function () {
         $("#cuadroResul").slideUp("fast");
       }
   });
-    
-  // $('#myCarousel').bind('slide.bs.carousel', function (e) {
-  // 	if (typeof document.getElementById("ant_svg") !== 'undefined') {
-  // 		InicMapaAntioquia();
-  // 	}
-  // })
 
   $("#busquedaMapa").keyup(function () {
     var texto = $(this).val();
@@ -59,7 +53,7 @@ $(window).on("load", function () {
     else {
       $.ajax({
         type: "GET",
-        url: "../Mapa/busquedaSVG",
+        url: "../Mapa/Ant/busquedaSVG",
         data: {
           palabra: texto
         },
@@ -84,23 +78,29 @@ function InicMapaAntioquia () {
     }
 		$(svgMunicipios[i]).hover(function(){
 			for (var a = 0; a < municipiosDatos.length; a++) {
-        if (municipiosDatos[a].id_municipio == this.id.split("-")[0]) {
-					var id = a;
-          $('body').append("<div id='hoveringTooltip' class='panel panel-info' style='position:absolute;'><div id='municipio' class='panel-heading' style='padding:5px;color:black!important;background:#FFB300!important'></div><div id='datos' class='panel-body' style='padding:5px;background:#f4f4f4'></div></div>");
-          $('#municipio').html(municipiosDatos[a].municipio);
-          $('#datos').html("Votos Partido: " + municipiosDatos[a].votospartido + "<br> Votos Candidato " + municipiosDatos[a].votoscandidato);
+        if (municipiosDatos[a].id == this.id.split("-")[0]) {
+          var id = a;
+          if (municipiosDatos[a].panel) {
+            $('body').append("<div id='hoveringTooltip' class='panel panel-info' style='position:absolute;'><div id='municipio' class='panel-heading' style='padding:5px;color:black!important;background:#FFB300!important'></div><div id='datos' class='panel-body' style='padding:5px;background:#f4f4f4'></div></div>");
+            $('#municipio').html(municipiosDatos[a].nombre);
+            $('#datos').html("Población: " + municipiosDatos[a].poblacion + "<br> Votos Partido: " + municipiosDatos[a].votospartido + "<br> Votos Candidato " + municipiosDatos[a].votoscandidato);
+          }
+          else {
+            $('body').append("<div id='hoveringTooltip' class='panel panel-info' style='position:absolute;background:transparent;border:transparent'><div id='municipio' class='panel-heading' style='padding:5px;color:black!important;background:#FFB300!important;margin-top:75px;margin-left:40px;border:black'></div></div>");
+            $('#municipio').html(municipiosDatos[a].nombre);
+          }
 				}
 			}
 		}, function(){
 		  $('#hoveringTooltip').remove();
 		}).mousemove(function(e) {
       var posX = e.pageX + posSvg.left - 100;
-			var posY = e.pageY + posSvg.top - 98;
+			var posY = e.pageY + posSvg.top - 115;
 			$('#hoveringTooltip').css({ top: posY, left: posX});
 		});
 
 		$(svgMunicipios[i]).click(function() {
-			window.location.href = "../Mapa?m=" + this.id.split("-")[0];
+			window.location.href = "../Mapa/Ant?m=" + this.id.split("-")[0];
 		})
 	}
 }
@@ -129,7 +129,7 @@ function atenuarMun (idmun) {
 function conseguirFilasElectorales (page, rows) {
   $.ajax({
     type: "GET",
-    url: "../Mapa/conseguir",
+    url: "../Mapa/Ant/conseguir",
     data: {
       idwhatevs: munSelec,
       ejecutar: 'filasElectorales',
@@ -158,7 +158,7 @@ function conseguirFilasElectorales (page, rows) {
 function conseguirLideres (page, rows, busqueda = 0) {
   $.ajax({
     type: "GET",
-    url: "../Mapa/conseguir",
+    url: "../Mapa/Ant/conseguir",
     data: {
       idwhatevs: munSelec,
       ejecutar: 'lideres',
@@ -195,7 +195,7 @@ function busquedaLideres () {
 function conseguirResumen (idcorp, anio) {
   $.ajax({
     type: "GET",
-    url: "../Mapa/resumen",
+    url: "../Mapa/Ant/resumen",
     data: {
       idcorp: idcorp,
       anio: anio
@@ -239,7 +239,7 @@ function obtCompromisos (aElement) {
 function conseguirCompromisos (page, rows) {
   $.ajax({
     type: 'GET',
-    url: '../Mapa/conseguir',
+    url: '../Mapa/Ant/conseguir',
     data: {
       idwhatevs: aElementComproId,
       ejecutar: 'compromisos',

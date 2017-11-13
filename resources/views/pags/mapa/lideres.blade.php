@@ -6,7 +6,7 @@
         <input type="hidden" name="municid" value="">
         <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
-      &nbspLíderes en {{$municipio}}
+      &nbspLíderes en {{$cosa}}
     </h4>
     <div class="vcenter-parent pull-right" style="margin-left:auto">
       <input type="text" class="form-control" id="busquedaLideres" placeholder="Buscar"/>
@@ -17,6 +17,9 @@
       <thead>
         <tr>
           <th></th>
+          @if(isset($issetsub))
+          <th>Municipio</th>
+          @endif
           <th>Nombre</th>
           <th>Cédula</th>
           <th>Correo</th>
@@ -30,7 +33,7 @@
       <tbody>
       @if(!(sizeof($lideres)))
         <tr>
-          <td colspan=9>Este municipio no tiene líderes</td>
+          <td colspan={{(isset($issetsub)) ? '10' : '9'}}>Este lugar no tiene líderes</td>
         </tr>
       @endif
       @foreach($lideres as $lider)
@@ -42,6 +45,9 @@
               </a>
             </h4>
           </td>
+          @if(isset($issetsub))
+          <td>{{$lider->municipio->nombre}}</td>
+          @endif
           <td>{{$lider->nombre}}</td>
           <td>{{$lider->cedula}}</td>
           <td>{{$lider->correo}}</td>

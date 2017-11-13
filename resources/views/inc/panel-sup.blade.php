@@ -20,7 +20,7 @@
     </p>
   </div>
   <div class="pull-right" style="margin-right: 15px;">
-    {!!Form::open(['action' => $panelsup[1].'Controller@index', 'method' => 'GET'])!!}
+    {!!Form::open(['action' => array($panelsup[1].'Controller@index', $sec), 'method' => 'GET'])!!}
       <div class="form-group">
         {{Form::text('q', '', ['class' => 'form-control', 'placeholder' => 'Buscar'])}}
       </div>
