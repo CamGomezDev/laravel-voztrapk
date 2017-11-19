@@ -1,10 +1,8 @@
 <div id="tablaSLideres">
   <div class="row vcenter-parent" style="margin: 0px 5px 10px 5px">
     <h4 class="vcenter-parent pull-left">
-      <form class="pull-left" action="../Backend/Exportar.php" method="GET">
-        <input type="hidden" name="municnombre" value="">
-        <input type="hidden" name="municid" value="">
-        <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+      <form class="pull-left" action="../ExportarLideresMapa{{Request::segment(2)}}/{{$idcosa}}" method="GET">
+        <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
       &nbspLíderes en {{$cosa}}
     </h4>
@@ -54,7 +52,7 @@
           <td>{{$lider->telefono}}</td>
           <td>{{$lider->nivel}}</td>
           <td>{{$lider->tipolider}}</td>
-          <td>{{($lider->activo == 1) ? 'Activo' : 'Inactivo'}}</td>
+          <td>{!!($lider->activo) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
           <td>{{$lider->votosestimados}}</td>
         </tr>
       @endforeach

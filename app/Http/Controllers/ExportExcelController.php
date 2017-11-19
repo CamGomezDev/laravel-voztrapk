@@ -8,14 +8,21 @@ use PHPExcel_Style_Border;
 use PHPExcel_Style_Fill;
 use PHPExcel_IOFactory;
 use App\FilaElectoral;
+use App\Lider;
+use App\Compromiso;
+use App\Comuna;
+use App\Corporacion;
+use App\Visita;
+use App\Subregion;
 use DB;
 
 class ExportExcelController extends Controller
 {
-  public function filasElectorales () {
+  public function filasElectoralesAnt () {
     $filasElectorales = FilaElectoral::join('municipios', 'fila_electorals.id_municipio', '=', 'municipios.id')
                                      ->join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
                                      ->select('fila_electorals.*', 'municipios.nombre as municipio_nombre', 'corporacions.nombre as corporacion_nombre')
+                                     ->whereNotNull('fila_electorals.id_municipio')
                                      ->orderBy('municipios.nombre')
                                      ->orderBy('anio', 'desc')->get();
 
@@ -34,27 +41,337 @@ class ExportExcelController extends Controller
     return redirect('/Administracion/InfoElectoral');
   }
 
-  public function lideres () {
+  public function filasElectoralesMed () {
+    $filasElectorales = FilaElectoral::join('comunas', 'fila_electorals.id_comuna', '=', 'comunas.id')
+                                     ->join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
+                                     ->select('fila_electorals.*', 'comunas.nombre as comuna_nombre', 'corporacions.nombre as corporacion_nombre')
+                                     ->whereNotNull('fila_electorals.id_comuna')
+                                     ->orderBy('comunas.nombre')
+                                     ->orderBy('anio', 'desc')->get();
 
+    $orden = array(
+      ['Comuna', 'comuna_nombre'],
+      ['Corporación', 'corporacion_nombre'],
+      ['Votos totales', 'votostotales'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Potencial electoral', 'potencialelectoral'],
+      ['Año', 'anio']
+    );
+
+    $this->exportar($filasElectorales, $orden, 7, 'Información Electoral');
+
+    return redirect('/Administracion/InfoElectoral');
   }
 
-  public function compromisos () {
+  public function lideresAnt () {
+    $lideres = Lider::join('municipios', 'liders.id_municipio', '=', 'municipios.id')
+                    ->select('liders.*', 'municipios.nombre as municipio_nombre')
+                    ->whereNotNull('id_municipio')
+                    ->orderBy('nombre')
+                    ->get();
 
+    $orden = array(
+      ['Nombre', 'nombre'],
+      ['Cédula', 'cedula'],
+      ['Correo', 'correo'],
+      ['Teléfono', 'telefono'],
+      ['Nivel', 'nivel'],
+      ['Tipo de líder', 'tipolider'],
+      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Votos estimados', 'votosestimados'],
+      ['Municipio', 'municipio_nombre']
+    );
+
+    $this->exportar($lideres, $orden, 9, 'Líderes');
+  }
+
+  public function lideresMed () {
+    $lideres = Lider::join('comunas', 'liders.id_comuna', '=', 'comunas.id')
+                    ->select('liders.*', 'comunas.nombre as comuna_nombre')
+                    ->whereNotNull('id_comuna')
+                    ->orderBy('nombre')
+                    ->get();
+
+    $orden = array(
+      ['Nombre', 'nombre'],
+      ['Cédula', 'cedula'],
+      ['Correo', 'correo'],
+      ['Teléfono', 'telefono'],
+      ['Nivel', 'nivel'],
+      ['Tipo de líder', 'tipolider'],
+      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Votos estimados', 'votosestimados'],
+      ['Comuna', 'comuna_nombre']
+    );
+
+    $this->exportar($lideres, $orden, 9, 'Líderes');
+  }
+
+  public function compromisosAnt () {
+    $compromisos = Compromiso::join('liders', 'compromisos.id_lider', '=', 'liders.id')
+                             ->select('compromisos.*', 'liders.nombre as lider_nombre')
+                             ->whereNotNull('liders.id_municipio')
+                             ->orderBy('liders.nombre')
+                             ->get();
+
+    $orden = array(
+      ['Líder', 'lider_nombre'],
+      ['Nombre', 'nombre'],
+      ['Descripción', 'descripcion'],
+      ['Cumplimiento', 'cumplimiento', 'Cumplido', 'Pendiente'],
+      ['Costo', 'costo']
+    );
+
+    $this->exportar($compromisos, $orden, 5, 'Compromisos en municipios');
+  }
+
+  public function compromisosMed () {
+    $compromisos = Compromiso::join('liders', 'compromisos.id_lider', '=', 'liders.id')
+                             ->select('compromisos.*', 'liders.nombre as lider_nombre')
+                             ->whereNotNull('liders.id_comuna')
+                             ->orderBy('liders.nombre')
+                             ->get();
+
+    $orden = array(
+      ['Líder', 'lider_nombre'],
+      ['Nombre', 'nombre'],
+      ['Descripción', 'descripcion'],
+      ['Cumplimiento', 'cumplimiento', 'Cumplido', 'Pendiente'],
+      ['Costo', 'costo']
+    );
+
+    $this->exportar($compromisos, $orden, 5, 'Compromisos en comunas');
   }
 
   public function corporaciones () {
+    $corporaciones = Corporacion::orderBy('nombre')->get();
+
+    $orden = array(
+      ['Corporación', 'nombre']
+    );
+
+    $this->exportar($corporaciones, $orden, 1, 'Corporaciones');
   }
 
   public function visitas () {
-    
+    $visitas = Visita::join('municipios', 'visitas.id_municipio', '=', 'municipios.id')
+                     ->select('municipios.nombre as municipio_nombre', 'visitas.*')
+                     ->orderBy('municipios.nombre')->get();
+
+    $orden = array(
+      ['Municipio', 'municipio_nombre'],
+      ['Notas', 'notas'],
+      ['Llegada', 'llegada'],
+      ['Salida', 'salida']
+    );
+
+    $this->exportar($visitas, $orden, 4, 'Visitas');
   }
 
-  public function usuarios () {
+  public function filasElectoralesMapaAnt ($id) {
+    $filasElectorales = FilaElectoral::join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
+                                     ->select('fila_electorals.*', 'corporacions.nombre as corporacion')
+                                     ->where('fila_electorals.id_municipio', '=', $id)
+                                     ->orderBy('anio', 'desc')
+                                     ->get();
+    
+    $orden = array(
+      ['Corporación', 'corporacion'],
+      ['Votos totales', 'votostotales'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Potencial electoral', 'potencialelectoral']
+    );
 
+    $this->exportar($filasElectorales, $orden, 5, 'Info. '.(Municipio::find($id))->nombre);
   }
 
-  public function roles() {
+  public function filasElectoralesMapaMed ($id) {
+    $filasElectorales = FilaElectoral::join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
+                                     ->select('fila_electorals.*', 'corporacions.nombre as corporacion')
+                                     ->where('fila_electorals.id_comuna', '=', $id)
+                                     ->orderBy('anio', 'desc')
+                                     ->get();
     
+    $orden = array(
+      ['Corporación', 'corporacion'],
+      ['Votos totales', 'votostotales'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Potencial electoral', 'potencialelectoral']
+    );
+
+    $this->exportar($filasElectorales, $orden, 5, 'Información de comuna');
+  }
+
+  public function filasElectoralesMapaSub ($id) {
+    $filasElectorales = DB::select(DB::raw("SELECT
+                                              SUM(fila_electorals.votoscandidato) AS votoscandidato,
+                                              SUM(fila_electorals.votospartido) AS votospartido,
+                                              SUM(fila_electorals.votostotales) AS votostotales,
+                                              SUM(fila_electorals.potencialelectoral) AS potencialelectoral,
+                                              fila_electorals.id_corporacion AS id_corporacion,
+                                              fila_electorals.anio AS anio
+                                            FROM (fila_electorals JOIN
+                                              municipios ON fila_electorals.id_municipio = municipios.id
+                                            ) WHERE municipios.id_subregion = {$id} 
+                                            GROUP BY fila_electorals.id_corporacion, fila_electorals.anio"));
+    foreach ($filasElectorales as $filaElectoral) {
+      $filaElectoral->corporacion_nombre = Corporacion::find($filaElectoral->id_corporacion)->nombre;
+    }
+    
+    $orden = array(
+      ['Corporación', 'corporacion_nombre'],
+      ['Votos totales', 'votostotales'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Potencial electoral', 'potencialelectoral']
+    );
+
+    $this->exportar($filasElectorales, $orden, 5, 'Información de subregión');
+  }
+
+  public function lideresMapaAnt ($id) {
+    $lideres = Lider::where('id_municipio', '=', $id)
+                    ->orderBy('nombre')
+                    ->get();
+
+    $orden = array(
+      ['Nombre', 'nombre'],
+      ['Cédula', 'cedula'],
+      ['Correo', 'correo'],
+      ['Teléfono', 'telefono'],
+      ['Nivel', 'nivel'],
+      ['Tipo de líder', 'tipolider'],
+      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Votos estimados', 'votosestimados']
+    );
+
+    $this->exportar($lideres, $orden, 8, 'Líderes en municipio');
+  }
+
+  public function lideresMapaMed ($id) {
+    $lideres = Lider::where('id_comuna', '=', $id)
+                    ->orderBy('nombre')
+                    ->get();
+
+    $orden = array(
+      ['Nombre', 'nombre'],
+      ['Cédula', 'cedula'],
+      ['Correo', 'correo'],
+      ['Teléfono', 'telefono'],
+      ['Nivel', 'nivel'],
+      ['Tipo de líder', 'tipolider'],
+      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Votos estimados', 'votosestimados']
+    );
+
+    $this->exportar($lideres, $orden, 8, 'Líderes en comuna');
+  }
+
+  public function lideresMapaSub ($id) {
+    $lideres = Lider::
+    // whereHas('municipio', function($query) use ($id) {
+    //                     $query->where('id_subregion', '=', $id);
+    //                   })
+                    join('municipios', 'liders.id_municipio', '=', 'municipios.id')
+                    ->where('municipios.id_subregion', '=', $id)
+                    ->select('liders.*', 'municipios.nombre as municipio_nombre')
+                    ->orderBy('municipios.nombre')
+                    ->orderBy('liders.nombre')
+                    ->get();
+
+    $orden = array(
+      ['Municipio', 'municipio_nombre'],
+      ['Nombre', 'nombre'],
+      ['Cédula', 'cedula'],
+      ['Correo', 'correo'],
+      ['Teléfono', 'telefono'],
+      ['Nivel', 'nivel'],
+      ['Tipo de líder', 'tipolider'],
+      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Votos estimados', 'votosestimados']
+    );
+
+    $this->exportar($lideres, $orden, 9, 'Líderes en subregión');
+  }
+
+  public function resumenSub (Request $request) {
+    $idcorp = DB::connection()->getPdo()->quote($request->get('id_corporacion'));
+    $anio   = DB::connection()->getPdo()->quote($request->get('anio'));
+
+    $subregiones = Subregion::get();
+    foreach ($subregiones as $subregion) {
+      $resumenfilasElec = DB::select(DB::raw("SELECT
+                                                SUM(fila_electorals.votoscandidato) AS votoscandidato,
+                                                SUM(fila_electorals.votospartido) AS votospartido,
+                                                SUM(fila_electorals.votostotales) AS votostotales,
+                                                SUM(fila_electorals.potencialelectoral) AS potencialelectoral
+                                              FROM (fila_electorals JOIN
+                                                municipios ON fila_electorals.id_municipio = municipios.id
+                                              ) WHERE municipios.id_subregion = {$subregion->id} AND
+                                                fila_electorals.anio = {$anio} AND
+                                                fila_electorals.id_corporacion = {$idcorp}"))[0];
+      $resumenVotosEsti = DB::select(DB::raw("SELECT SUM(liders.votosestimados) AS votosestimados
+                                              FROM (liders JOIN municipios ON liders.id_municipio = municipios.id)
+                                              WHERE municipios.id_subregion = {$subregion->id}"))[0];
+
+      $subregion->votoscandidato     = ($resumenfilasElec->votoscandidato) ? $resumenfilasElec->votoscandidato : 0;
+      $subregion->votospartido       = ($resumenfilasElec->votospartido) ? $resumenfilasElec->votospartido : 0;
+      $subregion->votostotales       = ($resumenfilasElec->votostotales) ? $resumenfilasElec->votostotales : 0;
+      $subregion->votosestimados     = ($resumenVotosEsti->votosestimados) ? $resumenVotosEsti->votosestimados : 0;
+      $subregion->potencialelectoral = ($resumenfilasElec->potencialelectoral) ? $resumenfilasElec->potencialelectoral : 0;
+    }
+
+    $orden = array (
+      ['Subregión', 'nombre'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Votos totales', 'votostotales'],
+      ['Votos estimados', 'votosestimados'],
+      ['Potencial electoral', 'potencialelectoral']
+    );
+
+    $this->exportar($subregiones, $orden, 6, 'Resumen por subregión');
+  }
+
+  public function resumenCom (Request $request) {
+    $idcorp = DB::connection()->getPdo()->quote($request->get('id_corporacion'));
+    $anio   = DB::connection()->getPdo()->quote($request->get('anio'));
+
+    $comunas = Comuna::get();
+    foreach ($comunas as $comuna) {
+      $resumenfilasElec = DB::select(DB::raw("SELECT
+                                                SUM(fila_electorals.votoscandidato) AS votoscandidato,
+                                                SUM(fila_electorals.votospartido) AS votospartido,
+                                                SUM(fila_electorals.votostotales) AS votostotales,
+                                                SUM(fila_electorals.potencialelectoral) AS potencialelectoral
+                                              FROM fila_electorals
+                                              WHERE fila_electorals.id_comuna = {$comuna->id} AND
+                                                fila_electorals.anio = {$anio} AND
+                                                fila_electorals.id_corporacion = {$idcorp}"))[0];
+      $resumenVotosEsti = DB::select(DB::raw("SELECT SUM(liders.votosestimados) AS votosestimados
+                                              FROM liders
+                                              WHERE liders.id_comuna = {$comuna->id}"))[0];
+
+      $comuna->votoscandidato     = ($resumenfilasElec->votoscandidato) ? $resumenfilasElec->votoscandidato : 0;
+      $comuna->votospartido       = ($resumenfilasElec->votospartido) ? $resumenfilasElec->votospartido : 0;
+      $comuna->votostotales       = ($resumenfilasElec->votostotales) ? $resumenfilasElec->votostotales : 0;
+      $comuna->votosestimados     = ($resumenVotosEsti->votosestimados) ? $resumenVotosEsti->votosestimados : 0;
+      $comuna->potencialelectoral = ($resumenfilasElec->potencialelectoral) ? $resumenfilasElec->potencialelectoral : 0;
+    }
+
+    $orden = array (
+      ['Nombre', 'nombre'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos partido', 'votospartido'],
+      ['Votos totales', 'votostotales'],
+      ['Votos estimados', 'votosestimados'],
+      ['Potencial electoral', 'potencialelectoral']
+    );
+
+    $this->exportar($comunas, $orden, 6, 'Resumen por comuna');
   }
 
   public function exportar ($datos, $orden, $colsNum, $nombre) {
@@ -107,7 +424,16 @@ class ExportExcelController extends Controller
       $a = -1;
       foreach ($orden as $ordenRow) {
         $a = ++$a;
-        $objPHPExcel->getActiveSheet()->setCellValue($letras[$a].$i, $datosRow->{$ordenRow[1]});
+        if (isset($ordenRow[2])) {
+          if ($datosRow->{$ordenRow[1]}) {
+            $fillInfo = $ordenRow[2];
+          } else {
+            $fillInfo = $ordenRow[3];
+          }
+        } else {
+          $fillInfo = $datosRow->{$ordenRow[1]};
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue($letras[$a].$i, $fillInfo);
       }
     }
 

@@ -48,12 +48,6 @@ $(window).on("load", function () {
         $("#cuadroResul").slideUp("fast");
       }
   });
-    
-  // $('#myCarousel').bind('slide.bs.carousel', function (e) {
-  // 	if (typeof document.getElementById("ant_svg") !== 'undefined') {
-  // 		InicMapaAntioquia();
-  // 	}
-  // })
 
   $("#busquedaMapa").keyup(function () {
     var texto = $(this).val();
@@ -74,6 +68,20 @@ $(window).on("load", function () {
       });
     }
     return false;
+  });
+
+  $("#ModalComuna").on("show.bs.modal", function (event) {
+    var button    = $(event.relatedTarget);
+    var id        = button.data('id');
+    var puestos = button.data('puestos');
+    var barrios = button.data('barrios');
+    var mesas   = button.data('mesas');
+
+    var modal = $(this);
+    modal.find('.modal-body #idInput').val(id);
+    modal.find('.modal-body #puestosInput').val(puestos);
+    modal.find('.modal-body #barriosInput').val(barrios);
+    modal.find('.modal-body #mesasInput').val(mesas);
   });
 });
 

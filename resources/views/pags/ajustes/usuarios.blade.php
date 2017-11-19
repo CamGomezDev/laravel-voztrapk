@@ -6,7 +6,7 @@
 		<h4>Usuarios</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = false; $panelsup = ['Usuarios','Users','usuarios','Usuario']; ?>
+    <?php $import = false; $alt = false; $sec = ''; $panelsup = ['Usuarios','Users','usuarios','Usuario']; ?>
     @include('inc.panel-sup')
     <div class="table-responsive">
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">

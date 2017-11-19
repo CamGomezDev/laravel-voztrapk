@@ -10,11 +10,11 @@
 			<div class="panel panel-default">
 				<div class="panel-body">
 				  <ul class="nav">
-				    <li class="{{(Request::segment(2) == 'InfoElectoral') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/InfoElectoral">Información Electoral</a></li>
-				    <li class="{{(Request::segment(2) == 'Lideres') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Lideres">Líderes</a></li>
-				    <li class="{{(Request::segment(2) == 'Compromisos') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Compromisos">Compromisos</a></li>
-				    <li class="{{(Request::segment(2) == 'Corporaciones') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Corporaciones">Corporaciones</a></li>
-            <li class="{{(Request::segment(2) == 'Visitas') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Visitas">Visitas</a></li>
+				    <li class="{{(Request::segment(3) == 'InfoElectoral') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/InfoElectoral">Información Electoral</a></li>
+				    <li class="{{(Request::segment(3) == 'Lideres') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Lideres">Líderes</a></li>
+				    <li class="{{(Request::segment(3) == 'Compromisos') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Compromisos">Compromisos</a></li>
+				    <li class="{{(Request::segment(3) == 'Corporaciones') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Corporaciones">Corporaciones</a></li>
+            <li class="{{(Request::segment(3) == 'Visitas') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Visitas">Visitas</a></li>
 				  </ul>
 				</div>
 			</div>

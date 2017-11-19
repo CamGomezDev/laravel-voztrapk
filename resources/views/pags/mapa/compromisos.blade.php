@@ -19,7 +19,7 @@
         <tr style="text-align: left">
           <td>{{$compromiso->nombre}}</td>
           <td>{{$compromiso->descripcion}}</td>
-          <td>{{($compromiso->cumplimiento) ? 'Cumplido' : 'Pendiente'}}</td>
+          <td>{!!($compromiso->cumplimiento) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
           <td>{{$compromiso->costo}}</td>                                            
         </tr>
       @endforeach

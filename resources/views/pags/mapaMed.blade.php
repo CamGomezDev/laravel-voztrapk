@@ -36,7 +36,7 @@
                   data-id     ="{{$comuna->id}}" 
                   data-puestos="{{$comuna->puestos}}"
                   data-barrios="{{$comuna->barrios}}"
-                  data-mesas  ="{{$comuna->mesass}}">Editar</button>
+                  data-mesas  ="{{$comuna->mesas}}">Editar</button>
               </div>
             </div>
             <div class="table-responsive">
@@ -90,30 +90,28 @@
 
 @if($idcom)
 <!-- Modal - Editar comuna -->
-<div id="ModalPoblacionWrapS">
-  <div class="modal fade" id="ModalComuna" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Editar comuna</h4>
-        </div>
-        {!!Form::open(['action' => 'MapaMedController@comuna', 'method' => 'POST'])!!}
-          <div class="modal-body">
-            {{Form::hidden('id', '', ['id' => 'idInput'])}}
-            {{Form::label('', 'Puestos')}}
-            {{Form::number('puestos', '', ['id' => 'puestosInput', 'class' => 'form-control'])}}
-            {{Form::label('', 'Barrios')}}
-            {{Form::number('barrios', '', ['id' => 'barriosInput', 'class' => 'form-control'])}}
-            {{Form::label('', 'Mesas')}}
-            {{Form::number('mesas', '', ['id' => 'mesasInput', 'class' => 'form-control'])}}
-            {{Form::hidden('ruta', "Mapa?c=".$comuna->id)}}
-          </div>
-          <div class="modal-footer">
-            {{Form::submit('Cambiar', ['class' => 'btn btn-danger'])}}
-          </div>
-        {!!Form::close()!!}
+<div class="modal fade" id="ModalComuna" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Editar comuna</h4>
       </div>
+      {!!Form::open(['action' => 'MapaMedController@comuna', 'method' => 'POST'])!!}
+        <div class="modal-body">
+          {{Form::hidden('id', '', ['id' => 'idInput'])}}
+          {{Form::label('', 'Puestos')}}
+          {{Form::number('puestos', '', ['id' => 'puestosInput', 'class' => 'form-control'])}}
+          {{Form::label('', 'Barrios')}}
+          {{Form::number('barrios', '', ['id' => 'barriosInput', 'class' => 'form-control'])}}
+          {{Form::label('', 'Mesas')}}
+          {{Form::number('mesas', '', ['id' => 'mesasInput', 'class' => 'form-control'])}}
+          {{Form::hidden('ruta', "Mapa/Med?c=".$comuna->id)}}
+        </div>
+        <div class="modal-footer">
+          {{Form::submit('Cambiar', ['class' => 'btn btn-danger'])}}
+        </div>
+      {!!Form::close()!!}
     </div>
   </div>
 </div>

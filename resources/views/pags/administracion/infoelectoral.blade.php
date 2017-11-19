@@ -6,7 +6,7 @@
 		<h4>Información Electoral</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = true; $panelsup = ['InfoElectoral','FilasElectorales','filasElectorales','Fila Electoral']; ?>
+    <?php $import = true; $alt = true; $panelsup = ['InfoElectoral','FilasElectorales','filasElectorales','Fila Electoral']; ?>
     @include('inc.panel-sup')
     <div class="table-responsive">
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">

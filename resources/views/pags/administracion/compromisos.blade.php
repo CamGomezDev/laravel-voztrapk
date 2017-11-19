@@ -6,7 +6,7 @@
 		<h4>Compromisos</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = true; $panelsup = ['Compromisos','Compromisos','compromisos','Compromiso']; ?>
+    <?php $import = true; $alt = true; $panelsup = ['Compromisos','Compromisos','compromisos','Compromiso']; ?>
     @include('inc.panel-sup')
     <div class="table-responsive">
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">
@@ -27,7 +27,7 @@
             <td>{{$compromiso->lider->nombre}}</td>
             <td>{{$compromiso->nombre}}</td>
             <td>{{$compromiso->descripcion}}</td>
-            <td>{{$compromiso->cumplimiento}}</td>
+            <td>{!!($compromiso->cumplimiento) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
             <td>{{$compromiso->costo}}</td>
             <td style="text-align: center">
               <h4 style="margin: 0;">

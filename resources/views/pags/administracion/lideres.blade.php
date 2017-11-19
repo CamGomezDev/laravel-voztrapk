@@ -6,7 +6,7 @@
 		<h4>Líderes</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = true; $panelsup = ['Lideres','Lideres','lideres','Líder']; ?>
+    <?php $import = true; $alt = true; $panelsup = ['Lideres','Lideres','lideres','Líder']; ?>
     @include('inc.panel-sup')
     <div class="table-responsive">
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">
@@ -34,7 +34,7 @@
             <td>{{$lider->telefono}}</td>
             <td>{{$lider->nivel}}</td>
             <td>{{$lider->tipolider}}</td>
-            <td>{{$lider->activo}}</td>
+            <td>{!!($lider->activo) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
             <td>{{$lider->votosestimados}}</td>            
             <td>{{($sec == 'Med') ? $lider->comuna->nombre : $lider->municipio->nombre}}</td>
             <td style="text-align: center">

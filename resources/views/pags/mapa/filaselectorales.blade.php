@@ -1,17 +1,19 @@
 <div id="tablaSFilasElectorales">
   <div class="row vcenter-parent" style="margin: 0px 5px 10px 5px">
     <h4 class="vcenter-parent pull-left">
-      <form class="pull-left" action="../Backend/Exportar.php" method="GET">
+      <form class="pull-left" action="../ExportarFilasElectoralesMapa{{Request::segment(2)}}/{{$idcosa}}" method="GET">
         <input type="hidden" name="municnombre" value="">
         <input type="hidden" name="municid" value="">
         <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
       &nbspInformación Electoral - {{$cosafrase}}
     </h4>
+    @if($editar)
     <div class="vcenter-parent pull-right" style="margin-left:auto;">
       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalPoblacion"
         data-id="{{$cosa->id}}" data-poblacion="{{$cosa->poblacion}}">Editar</button>
     </div>
+    @endif
   </div>
   <div class="table-responsive">
     <table class="table table-striped table-bordered" style="margin-bottom: 0px">
@@ -50,6 +52,7 @@
 
 
 <!-- Modal - Población -->
+@if($editar)
 <div id="ModalPoblacionWrapS">
   <div class="modal fade" id="ModalPoblacion" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
@@ -62,7 +65,7 @@
           <div class="modal-body">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
             {{Form::number('poblacion', '', ['id' => 'poblacionInput', 'class' => 'form-control'])}}
-            {{Form::hidden('ruta', "Mapa?m=".$cosa->id)}}
+            {{Form::hidden('ruta', "Mapa/Ant?m=".$cosa->id)}}
           </div>
           <div class="modal-footer">
             {{Form::submit('Cambiar', ['class' => 'btn btn-danger'])}}
@@ -72,3 +75,4 @@
     </div>
   </div>
 </div>
+@endif

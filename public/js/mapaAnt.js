@@ -208,7 +208,6 @@ function conseguirResumen (idcorp, anio) {
 }
 
 function obtCompromisos (aElement) {
-  console.log(aElement);
   if ($("#cellCompro").length) {
     elimCompromisos(document.getElementsByClassName("liderComActivo")[0]);
   }

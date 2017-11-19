@@ -48,12 +48,20 @@
       <div id="tablaVFilasElectorales" class="row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="pagVFilasElectorales" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="ModalPoblacionWrapV"></div>
+      
+      <hr class="style-one" style="margin: 15px 0px 15px 0px">
+      <h4 style="margin: 20px 0px 20px 20px">Municipios en la subregión {{$subregion->nombre}}</h4>
+      <div class="row" style="margin-left: 0px; margin-right: 0px">
+      @foreach($municipios as $municipio)
+        <div class="well well-sm" style="display:inline-block"><a href="../Ant?m={{$municipio->id}}">{{$municipio->nombre}}</a></div>
+      @endforeach
+      </div>
 
       <hr class="style-one" style="margin: 15px 0px 15px 0px">
       <div id="tablaVLideres" class="row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="pagVLideres" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
 
-      <button id="irarriba" type="button" class="btn btn-default pull-right">Ir arriba</button>
+      <button id="irarriba" type="button" class="btn btn-default pull-right" style="margin-top:20px">Ir arriba</button>
     </div>
   </div>
 </div>

@@ -20,7 +20,6 @@ Route::get('/Mapa/Ant/resumen', 'MapaAntController@resumen');
 Route::post('/Mapa/Ant/poblacion', 'MapaAntController@poblacion');
 
 Route::get('/Mapa/Subregion/{id}', 'MapaAntController@subregion');
-Route::get('/Mapa/Subregion/{id}/filasElec', 'MapaAntController@subFilasEl');
 
 
 Route::get('/Mapa/Med', 'MapaMedController@index');
@@ -84,13 +83,27 @@ Route::put('/Ajustes/Roles', 'RolesController@update');
 Route::delete('/Ajustes/Roles', 'RolesController@destroy');
 
 
-Route::get('/ExportarFilasElectorales', 'ExportExcelController@filasElectorales');
-Route::get('/ExportarLideres', 'ExportExcelController@lideres');
-Route::get('/ExportarCompromisos', 'ExportExcelController@compromisos');
+Route::get('/ExportarFilasElectoralesAnt', 'ExportExcelController@filasElectoralesAnt');
+Route::get('/ExportarFilasElectoralesMed', 'ExportExcelController@filasElectoralesMed');
+Route::get('/ExportarLideresAnt', 'ExportExcelController@lideresAnt');
+Route::get('/ExportarLideresMed', 'ExportExcelController@lideresMed');
+Route::get('/ExportarCompromisosAnt', 'ExportExcelController@compromisosAnt');
+Route::get('/ExportarCompromisosMed', 'ExportExcelController@compromisosMed');
 Route::get('/ExportarCorporaciones', 'ExportExcelController@corporaciones');
 Route::get('/ExportarVisitas', 'ExportExcelController@visitas');
 Route::get('/ExportarUsuarios', 'ExportExcelController@usuarios');
 Route::get('/ExportarRoles', 'ExportExcelController@roles');
+Route::get('/ExportarLideresMapaAnt/{id}', 'ExportExcelController@lideresMapaAnt');
+Route::get('/ExportarLideresMapaMed/{id}', 'ExportExcelController@lideresMapaMed');
+//Truco sucio que funciona por suerte ^^ (la ruta /ExportarLideresMapaSubregion no da):
+Route::get('/Mapa/ExportarLideresMapaAnt/{id}', 'ExportExcelController@lideresMapaSub');
+Route::get('/ExportarFilasElectoralesMapaAnt/{id}', 'ExportExcelController@filasElectoralesMapaAnt');
+Route::get('/ExportarFilasElectoralesMapaMed/{id}', 'ExportExcelController@filasElectoralesMapaMed');
+Route::get('/Mapa/ExportarFilasElectoralesMapaAnt/{id}', 'ExportExcelController@filasElectoralesMapaSub');
+Route::get('/ExportarResumenSub', 'ExportExcelController@resumenSub');
+Route::get('/ExportarResumenCom', 'ExportExcelController@resumenCom');
+
+
 Route::post('/Importar/{cosa}', 'ImportExcelController@importar');
 
 

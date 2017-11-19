@@ -6,7 +6,7 @@
 		<h4>Visitas</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = false; $panelsup = ['Visitas','Visitas','visitas','Visita']; ?>
+    <?php $import = false; $alt = false; $panelsup = ['Visitas','Visitas','visitas','Visita']; ?>
     @include('inc.panel-sup')
     @if($totRows > 0)
       @foreach($municipios as $municipio)

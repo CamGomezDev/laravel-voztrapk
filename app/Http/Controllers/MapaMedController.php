@@ -78,10 +78,12 @@ class MapaMedController extends Controller
         return view('pags.mapa.filaselectorales')->with('filasElectorales', $filasElectorales)
                                                  ->with('cosa', $comuna)
                                                  ->with('cosafrase', $cosafrase)
+                                                 ->with('editar', false)
                                                  ->with('totPags', $totPags)
                                                  ->with('totRows', $totRows)
                                                  ->with('rows', $rows)
-                                                 ->with('page', $page);
+                                                 ->with('page', $page)
+                                                 ->with('idcosa', $id);
         break;
 
       case 'lideres':
@@ -119,11 +121,13 @@ class MapaMedController extends Controller
                           ->paginate($rows);
           $totRows = Lider::where('id_comuna', '=', $id)->count();
         }
+        $votosestimados = DB::table('liders')->where('id_municipio', '=', $id)->sum('votosestimados');
         $totPags = ceil($totRows/$rows);
         return view('pags.mapa.lideres')->with('lideres', $lideres)
-                                        ->with('cosa', $comuna->nombre)
+                                        ->with('cosa', $comuna->nombre . " - Votos estimados totales: ".$votosestimados)
                                         ->with('totPags', $totPags)
                                         ->with('totRows', $totRows)
+                                        ->with('idcosa', $id)
                                         ->with('rows', $rows)
                                         ->with('page', $page);
         

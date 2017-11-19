@@ -6,7 +6,7 @@
 		<h4>Corporaciones</h4>
 	</div>
 	<div class="panel-body">
-    <?php $import = false; $panelsup = ['Corporaciones','Corporaciones','corporaciones','Corporación']; ?>
+    <?php $import = false; $alt = false; $panelsup = ['Corporaciones','Corporaciones','corporaciones','Corporación']; ?>
     @include('inc.panel-sup')
     <div class="table-responsive">
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">

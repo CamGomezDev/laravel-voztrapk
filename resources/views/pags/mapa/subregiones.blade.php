@@ -1,8 +1,8 @@
 <div id="tablaSResumen">
   <div class="row" style="margin:0px; margin-bottom:10px">
     <h4 class="vcenter-parent pull-left" style="margin-left: 5px; text-align: left">
-      <form action="../Backend/Exportar.php" method="GET">
-        <input type="hidden" name="corporacionid" value="{{$idcorp}}">
+      <form action="../ExportarResumenSub" method="GET">
+        <input type="hidden" name="id_corporacion" value="{{$idcorp}}">
         <input type="hidden" name="anio" value="{{$anio}}">
         <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarResumenMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
@@ -62,7 +62,7 @@
       @foreach($subregiones as $subregion)
         @if($subregion->id != '1' )
         <tr>
-          <td><a href="../Subregiones/{{$subregion->id}}">{{$subregion->nombre}}</a></td>
+          <td><a href="Subregion/{{$subregion->id}}">{{$subregion->nombre}}</a></td>
           <td>{{$subregion->votostotales}}</td>
           <td>{{$subregion->votoscandidato}}</td>
           <td>{{$subregion->votospartido}}</td>

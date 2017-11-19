@@ -64,19 +64,16 @@ class MapaAntController extends Controller
       $page = 1;
     }
     if($ejecutar == 'filasElectorales' || $ejecutar == 'lideres') {
-      $municipio = Municipio::where('id', '=', $id)
-      ->first();
-      $subregion = Subregion::where('id', '=', $municipio->id_subregion)
-      ->first();
+      $municipio = Municipio::where('id', '=', $id)->first();
+      $subregion = Subregion::where('id', '=', $municipio->id_subregion)->first();
       $cosafrase = $municipio->nombre.' - Subregión: '.$subregion->nombre.' - Población: '.(($municipio->poblacion) ? $municipio->poblacion : 0);
     }
     
-    if($ejecutar == 'lideresSubs') {
+    if($ejecutar == 'lideresSubs' || $ejecutar == 'filasElectoralesSubs') {
       $subregion = Subregion::find($id);
+      $cosafrase = 'Subregión '.$subregion->nombre;
     }
     
-    
-
     switch ($ejecutar) {
       case 'filasElectorales':
         $filasElectorales = FilaElectoral::where('id_municipio', '=', $id)
@@ -88,10 +85,41 @@ class MapaAntController extends Controller
         return view('pags.mapa.filaselectorales')->with('filasElectorales', $filasElectorales)
                                                  ->with('cosa', $municipio)
                                                  ->with('cosafrase', $cosafrase)
+                                                 ->with('editar', true)
                                                  ->with('totPags', $totPags)
                                                  ->with('totRows', $totRows)
                                                  ->with('rows', $rows)
-                                                 ->with('page', $page);
+                                                 ->with('page', $page)
+                                                 ->with('idcosa', $id);
+        break;
+
+      case 'filasElectoralesSubs':
+        $filasElectorales = DB::select(DB::raw("SELECT
+                                                  SUM(fila_electorals.votoscandidato) AS votoscandidato,
+                                                  SUM(fila_electorals.votospartido) AS votospartido,
+                                                  SUM(fila_electorals.votostotales) AS votostotales,
+                                                  SUM(fila_electorals.potencialelectoral) AS potencialelectoral,
+                                                  fila_electorals.id_corporacion AS corporacion,
+                                                  fila_electorals.anio AS anio
+                                                FROM (fila_electorals JOIN
+                                                  municipios ON fila_electorals.id_municipio = municipios.id
+                                                ) WHERE municipios.id_subregion = {$subregion->id}
+                                                GROUP BY fila_electorals.id_corporacion, fila_electorals.anio"));
+        foreach ($filasElectorales as $filaElectoral) {
+          $corpid = $filaElectoral->corporacion;
+          $filaElectoral->corporacion = new \stdClass();
+          $filaElectoral->corporacion->nombre = Corporacion::find($corpid)->nombre;
+        }
+
+        return view('pags.mapa.filaselectorales')->with('filasElectorales', $filasElectorales)
+                                                 ->with('cosa', $subregion)
+                                                 ->with('cosafrase', $cosafrase)
+                                                 ->with('editar', false)
+                                                 ->with('totPags', 1)
+                                                 ->with('totRows', 5)
+                                                 ->with('rows', 5)
+                                                 ->with('page', 1)
+                                                 ->with('idcosa', $id);
         break;
 
       case 'lideres':
@@ -129,19 +157,23 @@ class MapaAntController extends Controller
                           ->paginate($rows);
           $totRows = Lider::where('id_municipio', '=', $id)->count();
         }
+        $votosestimados = DB::table('liders')->where('id_municipio', '=', $id)->sum('votosestimados');
         $totPags = ceil($totRows/$rows);
         return view('pags.mapa.lideres')->with('lideres', $lideres)
-                                        ->with('cosa', $municipio->nombre)
+                                        ->with('cosa', $municipio->nombre . " - Votos estimados totales: ".$votosestimados)
                                         ->with('totPags', $totPags)
                                         ->with('totRows', $totRows)
                                         ->with('rows', $rows)
-                                        ->with('page', $page);
+                                        ->with('page', $page)
+                                        ->with('idcosa', $id);
 
       case 'lideresSubs':
-        
         if ($request->get('busq')) {
           $q = $request->get('busq');
-          $lideres = Lider::where(function($query) use ($q) {
+          $lideres = Lider::whereHas('municipio', function($query) use ($id, $q) {
+                              $query->where('nombre', 'LIKE', '%'.$q.'%');
+                            })
+                          ->orWhere(function($query) use ($q) {
                               $query->where('nombre', 'LIKE', '%'.$q.'%')
                                     ->orwhere('cedula', 'LIKE', '%'.$q.'%')
                                     ->orwhere('correo', 'LIKE', '%'.$q.'%')
@@ -152,15 +184,15 @@ class MapaAntController extends Controller
                                     ->orwhere('votosestimados', '=', $q);
                             })
                           ->whereHas('municipio', function($query) use ($id, $q) {
-                              $query->where('nombre', 'LIKE', '%'.$q.'%');
-                            })
-                          ->whereHas('municipio', function($query) use ($id, $q) {
-                              $query->where('id_subregion', '=', $id);
+                              $query->where('id_subregion', '=', '%'.$q.'%');
                             })
                           ->orderBy('nombre', 'asc')
                           ->paginate($rows);
-                          
-          $totRows = Lider::where(function($query) use ($q) {
+
+          $totRows = Lider::whereHas('municipio', function($query) use ($id, $q) {
+                              $query->where('nombre', 'LIKE', '%'.$q.'%');
+                            })
+                          ->orWhere(function($query) use ($q) {
                               $query->where('nombre', 'LIKE', '%'.$q.'%')
                                     ->orwhere('cedula', 'LIKE', '%'.$q.'%')
                                     ->orwhere('correo', 'LIKE', '%'.$q.'%')
@@ -171,10 +203,7 @@ class MapaAntController extends Controller
                                     ->orwhere('votosestimados', '=', $q);
                             })
                           ->whereHas('municipio', function($query) use ($id, $q) {
-                              $query->where('nombre', 'LIKE', '%'.$q.'%');
-                            })
-                          ->whereHas('municipio', function($query) use ($id, $q) {
-                              $query->where('id_subregion', '=', $id);
+                              $query->where('id_subregion', '=', '%'.$q.'%');
                             })
                           ->count();
         } else {
@@ -188,13 +217,22 @@ class MapaAntController extends Controller
                             })->count();
         }
         $totPags = ceil($totRows/$rows);
+        $votosestimados = 0;
+        $lideresvotes = Lider::select('votosestimados')
+                             ->whereHas('municipio', function($query) use ($id) {
+                                 $query->where('id_subregion', '=', $id);
+                               })->get();
+        foreach ($lideresvotes as $lid) {
+          $votosestimados = $votosestimados + $lid->votosestimados;
+        }                            
         return view('pags.mapa.lideres')->with('lideres', $lideres)
-                                        ->with('cosa', $subregion->nombre)
+                                        ->with('cosa', 'la subregión '.$subregion->nombre.' - Votos estimados totales: '.$votosestimados)
                                         ->with('totPags', $totPags)
                                         ->with('totRows', $totRows)
                                         ->with('rows', $rows)
                                         ->with('page', $page)
-                                        ->with('issetsub', 1);
+                                        ->with('issetsub', 1)
+                                        ->with('idcosa', $id);
         
       case 'compromisos':
         $compromisos = Compromiso::where('id_lider', '=', $id)
@@ -289,8 +327,6 @@ class MapaAntController extends Controller
     return redirect($request->input('ruta'));
   }
 
-
-
   public function subregion ($id, Request $request) {
     if ($id > 10 || $id < 1) {
       return redirect('/Mapa/Ant');
@@ -299,33 +335,19 @@ class MapaAntController extends Controller
     $subregion = Subregion::find($id);
 
     $subregiones = Subregion::select('id','nombre')->get();
-
-    $filasElec = DB::select(DB::raw("SELECT
-                                       SUM(fila_electorals.votoscandidato) AS votoscandidato,
-                                       SUM(fila_electorals.votospartido) AS votospartido,
-                                       SUM(fila_electorals.votostotales) AS votostotales,
-                                       SUM(fila_electorals.potencialelectoral) AS potencialelectoral
-                                     FROM (fila_electorals JOIN
-                                       municipios ON fila_electorals.id_municipio = municipios.id
-                                     ) WHERE municipios.id_subregion = {$subregion->id}"));
-
-    $votosEsti = DB::select(DB::raw("SELECT SUM(liders.votosestimados) AS votosestimados
-                                     FROM (liders JOIN municipios ON liders.id_municipio = municipios.id)
-                                     WHERE municipios.id_subregion = {$subregion->id}"))[0];
-
     
     $subregion->poblacion = 0;
     foreach ($subregion->municipios as $municipio) {
       $subregion->poblacion = $subregion->poblacion + $municipio->poblacion;
     }
 
-    $subregion->votosestimados   = $votosEsti;
-    $subregion->filasElectorales = $filasElec;
-
-    $municipios = $this->municipios();
+    $municipios = Municipio::select('id', 'nombre')
+                           ->where('id_subregion', '=', $id)
+                           ->get();
     
     return view('pags.mapaSubs')->with('subregion', $subregion)
                                 ->with('idsub', $id)
+                                ->with('municipios', $municipios)
                                 ->with('subregiones', json_encode($subregiones));
   }
 }

@@ -12,9 +12,11 @@
 @endif
 <div class="row">
   <div class="pull-left" style="margin-left: 15px;">
-    {!!Form::open(['action' => 'ExportExcelController@'.$panelsup[2], 'method' => 'GET', 'class' => 'pull-left', 'style' => 'margin-bottom: 5px; margin-right: 5px;'])!!}
+    @if(Request::segment(1) != 'Ajustes')
+    {!!Form::open(['action' => 'ExportExcelController@'.$panelsup[2].(($alt) ? Request::segment(2) : ''), 'method' => 'GET', 'class' => 'pull-left', 'style' => 'margin-bottom: 5px; margin-right: 5px;'])!!}
       <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
     {!!Form::close()!!}
+    @endif
     <p class="pull-right">
       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalCrear"><i class="fa fa-plus" aria-hidden="true"></i> {{$panelsup[3]}}</button>
     </p>
