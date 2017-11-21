@@ -10,6 +10,7 @@ use PHPExcel_IOFactory;
 use App\FilaElectoral;
 use App\Lider;
 use App\Compromiso;
+use App\Municipio;
 use App\Comuna;
 use App\Corporacion;
 use App\Visita;
@@ -36,7 +37,7 @@ class ExportExcelController extends Controller
       ['Año', 'anio']
     );
 
-    $this->exportar($filasElectorales, $orden, 7, 'Información Electoral');
+    $this->exportar($filasElectorales, $orden, 7, 'Info. electoral de municipios');
 
     return redirect('/Administracion/InfoElectoral');
   }
@@ -59,7 +60,7 @@ class ExportExcelController extends Controller
       ['Año', 'anio']
     );
 
-    $this->exportar($filasElectorales, $orden, 7, 'Información Electoral');
+    $this->exportar($filasElectorales, $orden, 7, 'Info. electoral de comunas');
 
     return redirect('/Administracion/InfoElectoral');
   }
@@ -78,12 +79,12 @@ class ExportExcelController extends Controller
       ['Teléfono', 'telefono'],
       ['Nivel', 'nivel'],
       ['Tipo de líder', 'tipolider'],
-      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Activo', 'activo'],
       ['Votos estimados', 'votosestimados'],
       ['Municipio', 'municipio_nombre']
     );
 
-    $this->exportar($lideres, $orden, 9, 'Líderes');
+    $this->exportar($lideres, $orden, 9, 'Líderes en municipios');
   }
 
   public function lideresMed () {
@@ -100,12 +101,12 @@ class ExportExcelController extends Controller
       ['Teléfono', 'telefono'],
       ['Nivel', 'nivel'],
       ['Tipo de líder', 'tipolider'],
-      ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Activo', 'activo'],
       ['Votos estimados', 'votosestimados'],
       ['Comuna', 'comuna_nombre']
     );
 
-    $this->exportar($lideres, $orden, 9, 'Líderes');
+    $this->exportar($lideres, $orden, 9, 'Líderes en comunas');
   }
 
   public function compromisosAnt () {
@@ -202,7 +203,7 @@ class ExportExcelController extends Controller
       ['Potencial electoral', 'potencialelectoral']
     );
 
-    $this->exportar($filasElectorales, $orden, 5, 'Información de comuna');
+    $this->exportar($filasElectorales, $orden, 5, 'Inf. '.Comuna::find($id)->nombre);
   }
 
   public function filasElectoralesMapaSub ($id) {
@@ -229,7 +230,7 @@ class ExportExcelController extends Controller
       ['Potencial electoral', 'potencialelectoral']
     );
 
-    $this->exportar($filasElectorales, $orden, 5, 'Información de subregión');
+    $this->exportar($filasElectorales, $orden, 5, 'Info. Subregión '.Subregion::find($id)->nombre);
   }
 
   public function lideresMapaAnt ($id) {
@@ -248,7 +249,7 @@ class ExportExcelController extends Controller
       ['Votos estimados', 'votosestimados']
     );
 
-    $this->exportar($lideres, $orden, 8, 'Líderes en municipio');
+    $this->exportar($lideres, $orden, 8, 'Líds. '.Municipio::find($id)->nombre);
   }
 
   public function lideresMapaMed ($id) {
@@ -267,7 +268,7 @@ class ExportExcelController extends Controller
       ['Votos estimados', 'votosestimados']
     );
 
-    $this->exportar($lideres, $orden, 8, 'Líderes en comuna');
+    $this->exportar($lideres, $orden, 8, 'Líd. '.Comuna::find($id)->nombre);
   }
 
   public function lideresMapaSub ($id) {
@@ -294,7 +295,7 @@ class ExportExcelController extends Controller
       ['Votos estimados', 'votosestimados']
     );
 
-    $this->exportar($lideres, $orden, 9, 'Líderes en subregión');
+    $this->exportar($lideres, $orden, 9, 'Líds. Subregión '.Subregion::find($id)->nombre);
   }
 
   public function resumenSub (Request $request) {

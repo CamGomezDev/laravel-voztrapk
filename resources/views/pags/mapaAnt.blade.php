@@ -13,7 +13,7 @@
             </ul>
           </div>
         </div>
-        <button id="irabajo" type="button" class="btn btn-default pull-right" style="margin-right:15px;">Ir abajo</button>
+        <button id="irabajo" type="button" class="btn btn-custom pull-right" style="margin-right:15px;">Ir abajo</button>
       </div>
 
       
@@ -30,7 +30,7 @@
       <hr class="style-one" style="margin: 15px 0px 15px 0px">
       <div id="tablaVLideres" class="row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="pagVLideres" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
-
+      
       <hr class="style-one" style="margin: 15px 0px 15px 0px">
       <div class="row" style="margin-left: 0px; margin-right: 0px">
         <div class="well well-md" data-toggle="collapse" style="margin-bottom:0px" href="#collapse{{$municipio->id}}">
@@ -76,7 +76,7 @@
             
       <div id="tablaVResumen" class="row" style="margin-left: 0px; margin-right: 0px"></div>
 
-      <button id="irarriba" type="button" class="btn btn-default pull-right">Ir arriba</button>
+      <button id="irarriba" type="button" class="btn btn-custom pull-right">Ir arriba</button>
     </div>
   </div>
 </div>

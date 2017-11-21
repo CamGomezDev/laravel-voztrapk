@@ -21,7 +21,7 @@
             <?php $id = Auth::user()->id_rol ?>
             <ul class="nav navbar-nav">
                 @if($id == 1 || $id == 3 || $id == 4)
-                <li class="dropdown">
+                <li class="dropdown {{(Request::segment(1) == 'Mapa') ? 'active' : ''}}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         Mapa <span class="caret"></span>
                     </a>
@@ -33,7 +33,7 @@
                 </li>
                 @endif
                 @if($id == 1 || $id == 3)
-                <li class="dropdown">
+                <li class="dropdown {{(Request::segment(1) == 'Administracion') ? 'active' : ''}}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         Administración <span class="caret"></span>
                     </a>

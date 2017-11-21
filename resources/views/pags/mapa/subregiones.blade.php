@@ -1,10 +1,10 @@
 <div id="tablaSResumen">
-  <div class="row" style="margin:0px; margin-bottom:10px">
+  <div class="row" style="margin:0px">
     <h4 class="vcenter-parent pull-left" style="margin-left: 5px; text-align: left">
       <form action="../ExportarResumenSub" method="GET">
         <input type="hidden" name="id_corporacion" value="{{$idcorp}}">
         <input type="hidden" name="anio" value="{{$anio}}">
-        <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px" name="exportarResumenMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px" name="exportarResumenMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
       <span>&nbspResumen por subregión - Votación para</span>
     </h4>
@@ -47,7 +47,7 @@
     </h4>
   </div>
   <div class="table-responsive">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered" style="margin-top:10px">
       <thead>
         <tr>
           <th>Subregión</th>

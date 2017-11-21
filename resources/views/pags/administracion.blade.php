@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-	<div class="well well-sm">
+	<div class="well well-sm" style="border: 1px solid rgb(190, 190, 190); text-align:center">
 		{{$secNom}}
 	</div>
 	<div class="row">

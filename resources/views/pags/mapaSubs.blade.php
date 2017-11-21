@@ -6,7 +6,7 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="row" style="margin-bottom: 15px">
-        <button id="irabajo" type="button" class="btn btn-default pull-right" style="margin-right:15px;">Ir abajo</button>
+        <button id="irabajo" type="button" class="btn btn-custom pull-right" style="margin-right:15px;">Ir abajo</button>
       </div>
 
       <div class="row">
@@ -61,7 +61,7 @@
       <div id="tablaVLideres" class="row" style="margin-left: 0px; margin-right: 0px"></div>
       <div id="pagVLideres" class="fixed-table-pagination row" style="margin-left: 0px; margin-right: 0px"></div>
 
-      <button id="irarriba" type="button" class="btn btn-default pull-right" style="margin-top:20px">Ir arriba</button>
+      <button id="irarriba" type="button" class="btn btn-custom pull-right" style="margin-top:20px">Ir arriba</button>
     </div>
   </div>
 </div>

@@ -95,7 +95,7 @@ Route::get('/ExportarUsuarios', 'ExportExcelController@usuarios');
 Route::get('/ExportarRoles', 'ExportExcelController@roles');
 Route::get('/ExportarLideresMapaAnt/{id}', 'ExportExcelController@lideresMapaAnt');
 Route::get('/ExportarLideresMapaMed/{id}', 'ExportExcelController@lideresMapaMed');
-//Truco sucio que funciona por suerte ^^ (la ruta /ExportarLideresMapaSubregion no da):
+//Truco sucio que funciona por suerte (la ruta /ExportarLideresMapaSubregion no da)
 Route::get('/Mapa/ExportarLideresMapaAnt/{id}', 'ExportExcelController@lideresMapaSub');
 Route::get('/ExportarFilasElectoralesMapaAnt/{id}', 'ExportExcelController@filasElectoralesMapaAnt');
 Route::get('/ExportarFilasElectoralesMapaMed/{id}', 'ExportExcelController@filasElectoralesMapaMed');

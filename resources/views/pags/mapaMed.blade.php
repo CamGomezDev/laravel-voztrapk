@@ -13,7 +13,7 @@
             </ul>
           </div>
         </div>
-        <button id="irabajo" type="button" class="btn btn-default pull-right" style="margin-right:15px;">Ir abajo</button>
+        <button id="irabajo" type="button" class="btn btn-custom pull-right" style="margin-right:15px;">Ir abajo</button>
       </div>
       <div class="row">
         @if($idcom)
@@ -32,7 +32,7 @@
                 &nbsp{{$comuna->nombre}}
               </h4>
               <div class="vcenter-parent pull-right" style="margin-left:auto;">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ModalComuna"
+                <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#ModalComuna"
                   data-id     ="{{$comuna->id}}" 
                   data-puestos="{{$comuna->puestos}}"
                   data-barrios="{{$comuna->barrios}}"
@@ -76,7 +76,7 @@
       <hr class="style-one">           
       <div id="tablaVResumen" class="row" style="margin-left: 0px; margin-right: 0px"></div>
 
-      <button id="irarriba" type="button" class="btn btn-default pull-right">Ir arriba</button>
+      <button id="irarriba" type="button" class="btn btn-custom pull-right">Ir arriba</button>
     </div>
   </div>
 </div>

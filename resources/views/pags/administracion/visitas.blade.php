@@ -10,7 +10,7 @@
     @include('inc.panel-sup')
     @if($totRows > 0)
       @foreach($municipios as $municipio)
-      <div class="well well-sm" data-toggle="collapse" href="#collapse{{$municipio->id}}">
+      <div class="well well-sm" data-toggle="collapse" href="#collapse{{$municipio->id}}" style="border: 1px solid rgb(190, 190, 190)">
         <b>{{$municipio->nombre}} - Visitas: {{(count($municipio->visitas)) ? count($municipio->visitas) : 0}}</b>
         <div class="table-responsive collapse" id="collapse{{$municipio->id}}" style="margin-top:15px">
           <table class="table table-striped table-bordered" style="margin-bottom: 0px">

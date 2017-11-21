@@ -1,8 +1,8 @@
 <div id="tablaSLideres">
-  <div class="row vcenter-parent" style="margin: 0px 5px 10px 5px">
+  <div class="row vcenter-parent" style="margin: 0px 5px 0px 5px">
     <h4 class="vcenter-parent pull-left">
       <form class="pull-left" action="../ExportarLideresMapa{{Request::segment(2)}}/{{$idcosa}}" method="GET">
-        <button type="submit" class="btn btn-default" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
       &nbspLíderes en {{$cosa}}
     </h4>
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div id="tablaSLideresTabla" class="table-responsive">
-    <table class="table table-striped table-bordered" style="margin-bottom: 0px">
+    <table class="table table-striped table-bordered" style="margin-bottom: 0px; margin-top: 10px">
       <thead>
         <tr>
           <th></th>
