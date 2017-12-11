@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Lider;
 use App\Municipio;
 use App\Comuna;
+use App\PuestoVotacion;
 use DB;
 
 class LideresController extends AdministracionController
@@ -71,9 +72,15 @@ class LideresController extends AdministracionController
     } else {
       $seclista = Municipio::orderBy('nombre', 'asc')->pluck('nombre', 'id');
     }
+    if ($sec == 'Med') {
+      $puestosvotacion = PuestoVotacion::orderBy('nombre')->pluck('nombre', 'id');
+    } else {
+      $puestosvotacion = null;
+    }
 
     return view('pags.administracion.lideres')->with('lideres', $lideres)
                                               ->with('seclista', $seclista)
+                                              ->with('puestosvotacion', $puestosvotacion)
                                               ->with('rows', $rows)
                                               ->with('totRows', $totRows)
                                               ->with('sec', $sec)
@@ -106,6 +113,9 @@ class LideresController extends AdministracionController
       $lider->id_comuna = $request->input('id_municipio');
     } else {
       $lider->id_municipio = $request->input('id_municipio');
+    }
+    if ($sec == 'Med') {
+      $lider->puesto_votacion_id = $request->input('puesto');
     }
 
     $lider->save();
@@ -143,6 +153,9 @@ class LideresController extends AdministracionController
     } else {
       $lider->id_municipio = $request->input('id_municipio');
     }
+    if ($sec == 'Med') {
+      $lider->puesto_votacion_id = $request->input('puesto');
+    }
 
     $lider->save();
 
@@ -158,8 +171,12 @@ class LideresController extends AdministracionController
   public function destroy(Request $request)
   {
     $lider = Lider::find($request->input('id'));
-    $lider->delete();
 
-    return redirect($request->input('ruta'))->with('success', 'Líder eliminado');
+    if ($lider->has('compromisos')) {
+      return redirect($request->input('ruta'))->with('error', 'Este líder tiene compromisos asignados. No se podrá eliminar si no están removidos.');
+    } else {
+      $lider->delete();
+      return redirect($request->input('ruta'))->with('success', 'Líder eliminado');
+    }
   }
 }

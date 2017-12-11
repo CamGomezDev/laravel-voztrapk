@@ -42,7 +42,7 @@ class UsersController extends AjustesController
       $totRows  = User::count();
     }
 
-    $roles = Rol::orderBy('nombre', 'asc')->pluck('nombre', 'id');
+    $roles = Rol::pluck('nombre', 'id');
     return view('pags.ajustes.usuarios')->with('usuarios', $usuarios)
                                         ->with('roles', $roles)
                                         ->with('rows', $rows)

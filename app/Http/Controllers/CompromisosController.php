@@ -78,16 +78,8 @@ class CompromisosController extends AdministracionController
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-  public function store(Request $request)
+  public function store($sec, Request $request)
   {
-    $this->validate($request, [
-      'id_lider' => 'required',
-      'nombre'  => 'required',
-      'descripcion' => 'required',
-      'cumplimiento' => 'required',
-      'costo' => 'required',
-    ]);
-
     $compromiso = new Compromiso;
     $compromiso->id_lider     = $request->input('id_lider');
     $compromiso->nombre       = $request->input('nombre');
@@ -97,7 +89,7 @@ class CompromisosController extends AdministracionController
 
     $compromiso->save();
 
-    return redirect('/Administracion/Compromisos')->with('success', 'Compromiso creado');
+    return redirect('/Administracion/'.$sec.'/Compromisos')->with('success', 'Compromiso creado');
   }
 
   /**
@@ -109,14 +101,6 @@ class CompromisosController extends AdministracionController
     */
   public function update(Request $request)
   {
-    $this->validate($request, [
-      'id_lider' => 'required',
-      'nombre'  => 'required',
-      'descripcion' => 'required',
-      'cumplimiento' => 'required',
-      'costo' => 'required',
-    ]);
-
     $compromiso = Compromiso::find($request->input('id'));
     
     $compromiso->id_lider     = $request->input('id_lider');

@@ -27,14 +27,15 @@ class User extends Authenticatable
       'password', 'remember_token',
   ];
 
-
   public function rol () {
     return $this->belongsTo('App\Rol', 'id_rol', 'id');
   }
 
-  public function tieneRol ($rol) {
-    if ($this->id_rol == $rol) {
-      return true;
+  public function tieneRol ($roles) {
+    foreach ($roles as $rol) {
+      if ($this->id_rol == $rol ) {
+        return true;
+      }
     }
     return false;
   }
@@ -42,7 +43,7 @@ class User extends Authenticatable
   public function entrada () {
     $id = $this->id_rol;
     if ($id == 1 || $id == 3 || $id == 4) {
-      return '/Mapa';
+      return '/Mapa/Ant';
     }
     if ($id == 2) {
       return '/Ajustes';

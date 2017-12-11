@@ -13,4 +13,12 @@ class Comuna extends Model
     public function liders() {
         return $this->hasMany('App\Lider');
     }
+
+    public function barrios() {
+        return $this->hasMany('App\Barrio');
+    }
+
+    public function puesto_votacions() {
+        return $this->hasMany('App\PuestoVotacion');
+    }
 }

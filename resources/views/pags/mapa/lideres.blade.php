@@ -1,10 +1,11 @@
 <div id="tablaSLideres">
   <div class="row vcenter-parent" style="margin: 0px 5px 0px 5px">
     <h4 class="vcenter-parent pull-left">
-      <form class="pull-left" action="../ExportarLideresMapa{{Request::segment(2)}}/{{$idcosa}}" method="GET">
-        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+    <?php $sec = Request::segment(2) ?>
+      <form class="pull-left" action="../ExportarLideresMapa{{$sec}}/{{$idcosa}}" method="GET">
+        <button type="submit" class="btn btn-custom" style="padding-right:7px;padding-left:7px;margin-right:5px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
-      &nbspLíderes en {{$cosa}}
+      Líderes en {{$cosa}}
     </h4>
     <div class="vcenter-parent pull-right" style="margin-left:auto">
       <input type="text" class="form-control" id="busquedaLideres" placeholder="Buscar"/>
@@ -25,13 +26,26 @@
           <th>Nivel</th>
           <th>Tipo de líder</th>
           <th>Activo</th>
+          @if($sec == 'Med')
+          <th>Puesto de votación</th>
+          <th>Barrio</th>
+          @endif
           <th>Votos estimados</th>
         </tr>
       </thead>
       <tbody>
       @if(!(sizeof($lideres)))
+        <?php
+        if(isset($issetsub)) {
+          $col = 10;
+        } elseif($sec=='Med') {
+          $col = 11;
+        } else {
+          $col = 9;
+        }
+        ?>
         <tr>
-          <td colspan={{(isset($issetsub)) ? '10' : '9'}}>Este lugar no tiene líderes</td>
+          <td colspan={{$col}}>Este lugar no tiene líderes</td>
         </tr>
       @endif
       @foreach($lideres as $lider)
@@ -53,6 +67,9 @@
           <td>{{$lider->nivel}}</td>
           <td>{{$lider->tipolider}}</td>
           <td>{!!($lider->activo) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
+          @if($sec == 'Med')
+          <td>{{$lider->puesto_votacion->nombre}}</td>
+          @endif
           <td>{{$lider->votosestimados}}</td>
         </tr>
       @endforeach

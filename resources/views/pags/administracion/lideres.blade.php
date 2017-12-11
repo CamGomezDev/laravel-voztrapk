@@ -12,6 +12,7 @@
       <table class="table table-striped table-bordered" style="margin-bottom: 0px">
         <thead>
           <tr>
+            <th>{{($sec == 'Med') ? 'Comuna' : 'Municipio'}}</th>
             <th>Nombre</th>
             <th>Cédula</th>
             <th>Correo</th>
@@ -19,8 +20,11 @@
             <th>Nivel</th>
             <th>Tipo de líder</th>
             <th>Activo</th>
+            @if($sec == 'Med')
+            <th>Puesto de votación</th>
+            <th>Barrio</th>
+            @endif
             <th>Votos estimados</th>
-            <th>{{($sec == 'Med') ? 'Comuna' : 'Municipio'}}</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -28,6 +32,7 @@
         @if($totRows > 0)
           @foreach($lideres as $lider)
           <tr>
+            <td>{{($sec == 'Med') ? $lider->id_comuna : $lider->municipio->nombre}}</td>
             <td>{{$lider->nombre}}</td>
             <td>{{$lider->cedula}}</td>
             <td>{{$lider->correo}}</td>
@@ -35,8 +40,11 @@
             <td>{{$lider->nivel}}</td>
             <td>{{$lider->tipolider}}</td>
             <td>{!!($lider->activo) ? '<i class="fa fa-check" aria-hidden="true" style="color:#31f931"></i>' : '<i class="fa fa-times" aria-hidden="true" style="color:red"></i>'!!}</td>
-            <td>{{$lider->votosestimados}}</td>            
-            <td>{{($sec == 'Med') ? $lider->comuna->nombre : $lider->municipio->nombre}}</td>
+            @if($sec == 'Med')
+            <td>{{$lider->puesto_votacion->nombre}}</td>
+            <td>{{$lider->puesto_votacion->barrio->nombre}}</td>
+            @endif
+            <td>{{$lider->votosestimados}}</td>
             <td style="text-align: center">
               <h4 style="margin: 0;">
                 <a type="button" data-toggle="modal" data-target="#ModalActualizar"
@@ -47,9 +55,11 @@
                   data-telefono=      "{{$lider->telefono}}"
                   data-nivel=         "{{$lider->nivel}}"
                   data-tipolider=     "{{$lider->tipolider}}"
-                  data-votosestimados="{{$lider->votosestimados}}"
                   data-activo=        "{{$lider->activo}}"
-                  data-id_municipio=  "{{($sec == 'Med') ? $lider->comuna->id : $lider->municipio->id}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
+                  data-id_municipio=  "{{($sec == 'Med') ? $lider->comuna->id : $lider->municipio->id}}"
+                  data-puesto=        "{{(isset($lider->puesto_votacion_id)) ? $lider->puesto_votacion_id : 0}}"
+                  data-votosestimados="{{$lider->votosestimados}}"
+                  ><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
                 <a type="button" data-toggle="modal" data-target="#ModalEliminar" data-id="{{$lider->id}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
               </h4>
             </td>
@@ -57,7 +67,7 @@
           @endforeach
         @else
           <tr>
-            <td colspan=10>No se encontraron resultados</td>
+            <td colspan="{{($sec == 'Med') ? '11' : 10}}">No se encontraron resultados</td>
           </tr>
         @endif
         </tbody>
@@ -89,8 +99,10 @@
       {!!Form::open(['action' => array('LideresController@store', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...', 'required'])}}
             {{Form::label('', 'Nombre')}}
-            {{Form::text('nombre', '', ['class' => 'form-control'])}}
+            {{Form::text('nombre', '', ['class' => 'form-control', 'required'])}}
             {{Form::label('', 'Cédula')}}
             {{Form::text('cedula', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Correo')}}
@@ -102,11 +114,13 @@
             {{Form::label('', 'Tipo de líder')}}
             {{Form::text('tipolider', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Activo')}}
-            {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['class' => 'form-control'])}}
+            {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['class' => 'form-control', 'required'])}}
+            @if($sec == 'Med')
+            {{Form::label('', 'Puesto de votación')}}
+            {{Form::select('puesto', $puestosvotacion, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar puesto...', 'required'])}}
+            @endif
             {{Form::label('', 'Votos estimados')}}
-            {{Form::number('votosestimados', '', ['class' => 'form-control'])}}
-            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
-            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
+            {{Form::number('votosestimados', '', ['class' => 'form-control', 'required'])}}
           </div>
         </div>
         <div class="modal-footer">
@@ -129,8 +143,10 @@
         <div class="modal-body">
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
+            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
+            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...', 'required'])}}
             {{Form::label('', 'Nombre')}}
-            {{Form::text('nombre', '', ['id' => 'nombreInput', 'class' => 'form-control'])}}
+            {{Form::text('nombre', '', ['id' => 'nombreInput', 'class' => 'form-control', 'required'])}}
             {{Form::label('', 'Cédula')}}
             {{Form::text('cedula', '', ['id' => 'cedulaInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Correo')}}
@@ -142,11 +158,13 @@
             {{Form::label('', 'Tipo de líder')}}
             {{Form::text('tipolider', '', ['id' => 'tipoliderInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Activo')}}
-            {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['id' => 'activoInput', 'class' => 'form-control'])}}
+            {{Form::select('activo', ['1'=>'Activo', '0'=>'Inactivo'], null, ['id' => 'activoInput', 'class' => 'form-control', 'required'])}}
+            @if($sec == 'Med')
+            {{Form::label('', 'Puesto de votación')}}
+            {{Form::select('puesto', $puestosvotacion, null, ['id' => 'puestoInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar puesto...', 'required'])}}
+            @endif
             {{Form::label('', 'Votos estimados')}}
-            {{Form::text('votosestimados', '', ['id' => 'votosestimadosInput', 'class' => 'form-control'])}}
-            {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
-            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
+            {{Form::text('votosestimados', '', ['id' => 'votosestimadosInput', 'class' => 'form-control', 'required'])}}
             {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}
             {{Form::hidden('_method', 'PUT')}}
           </div>

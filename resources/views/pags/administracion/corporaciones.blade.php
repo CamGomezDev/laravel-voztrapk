@@ -62,7 +62,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Crear Corporación</h4>
       </div>
-      {!!Form::open(['action' => 'CorporacionesController@store', 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('CorporacionesController@store', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::label('', 'Nombre')}}

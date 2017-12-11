@@ -107,12 +107,6 @@ class FilasElectoralesController extends AdministracionController
     */
   public function store($sec, Request $request)
   {
-    $this->validate($request, [
-      'id_municipio' => 'required',
-      'id_corporacion'  => 'required',
-      'anio' => 'required'
-    ]);
-
     $filaElectoral = new FilaElectoral;
 
     if ($sec == 'Med') {
@@ -141,21 +135,12 @@ class FilasElectoralesController extends AdministracionController
     */
   public function update(Request $request, $sec)
   {
-    $id_req = ($sec == 'Med') ? 'id_comuna' : 'id_municipio';
-
-    $this->validate($request, [
-      'id' => 'required',
-      $id_req => 'required',
-      'id_corporacion'  => 'required',
-      'anio' => 'required'
-    ]);
-    
     $filaElectoral = FilaElectoral::find($request->input('id'));
 
     if ($sec == 'Med') {
-      $filaElectoral->id_comuna = $request->input($id_req);
+      $filaElectoral->id_comuna = $request->input('id_municipio');
     } else {
-      $filaElectoral->id_municipio = $request->input($id_req);
+      $filaElectoral->id_municipio = $request->input('id_municipio');
     }
     $filaElectoral->id_corporacion     = $request->input('id_corporacion');
     $filaElectoral->votostotales       = $request->input('votostotales');

@@ -12,6 +12,9 @@ $(window).on('load', function() {
     var activo  	     = button.data('activo');
     var votosestimados = button.data('votosestimados');
     var id_municipio   = button.data('id_municipio');
+    if (button.data('puesto')) {
+      var puesto = button.data('puesto');
+    }
     
 	  var modal = $(this);
 	  modal.find('.modal-body #idInput').val(id);
@@ -24,6 +27,9 @@ $(window).on('load', function() {
     modal.find('.modal-body #activoInput').val(activo);
     modal.find('.modal-body #votosestimadosInput').val(votosestimados);
     modal.find('.modal-body #id_municipioInput').val(id_municipio);
+    if (button.data('puesto')) {
+      modal.find('.modal-body #puestoInput').val(puesto);
+    }
 	});
 
 	$("#ModalEliminar").on('show.bs.modal', function (event) {

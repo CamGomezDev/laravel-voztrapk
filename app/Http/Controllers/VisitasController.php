@@ -52,15 +52,8 @@ class VisitasController extends AdministracionController
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-  public function store(Request $request)
+  public function store($sec, Request $request)
   {
-    $this->validate($request, [
-      'notas' => 'required',
-      'llegada' => 'required',
-      'salida' => 'required',
-      'id_municipio' => 'required'
-    ]);
-
     $visita = new Visita;
     $visita->notas         = $request->input('notas');
     $visita->llegada       = $request->input('llegada');
@@ -69,7 +62,7 @@ class VisitasController extends AdministracionController
 
     $visita->save();
 
-    return redirect('/Administracion/Visitas')->with('success', 'Visita añadida');
+    return redirect('/Administracion/'.$sec.'/Visitas')->with('success', 'Visita añadida');
   }
 
   /**

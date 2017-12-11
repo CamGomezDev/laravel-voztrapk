@@ -14,7 +14,7 @@ class AnotherForeignKeyToComunasInFilaElectorals extends Migration
     public function up()
     {
         Schema::table('fila_electorals', function (Blueprint $table) {
-            $table->dropForeign('fila_electorals_id_municipio_foreign');
+            $table->dropForeign('filas_electorales_id_municipio_foreign');
         });
 
         Schema::table('fila_electorals', function (Blueprint $table) {

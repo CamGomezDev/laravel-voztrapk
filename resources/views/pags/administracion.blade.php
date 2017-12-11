@@ -14,7 +14,12 @@
 				    <li class="{{(Request::segment(3) == 'Lideres') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Lideres">Líderes</a></li>
 				    <li class="{{(Request::segment(3) == 'Compromisos') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Compromisos">Compromisos</a></li>
 				    <li class="{{(Request::segment(3) == 'Corporaciones') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Corporaciones">Corporaciones</a></li>
+            @if(Request::segment(2) == 'Ant')
             <li class="{{(Request::segment(3) == 'Visitas') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/Visitas">Visitas</a></li>
+            @endif
+            @if(Request::segment(2) == 'Med')
+            <li class="{{(Request::segment(3) == 'PuestosVotacion') ? 'active-sidebar' : ''}}"><a href="/Administracion/{{$sec}}/PuestosVotacion">Puestos de Votación</a></li>
+            @endif
 				  </ul>
 				</div>
 			</div>

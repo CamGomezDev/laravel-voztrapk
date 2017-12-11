@@ -279,9 +279,11 @@ class MapaAntController extends Controller
                           ->orderBy('anio', 'desc')->get();
 
     if($request->has('anio')) {
-      $anio = $request->get('anio');
+      $anioOrig = $request->get('anio');
+      $anio = DB::connection()->getPdo()->quote($anioOrig);
     } else {
       $anio = $anios[0]->anio;
+      $anioOrig = $anio;
     }
 
     $subregiones = Subregion::get();
@@ -310,7 +312,7 @@ class MapaAntController extends Controller
     $corporaciones = Corporacion::get();
 
     return view('pags.mapa.subregiones')->with('subregiones', $subregiones)
-                                        ->with('anio', $anio)
+                                        ->with('anio', $anioOrig)
                                         ->with('anios', $anios)
                                         ->with('idcorp', $idcorpOrig)
                                         ->with('corp', $corp)

@@ -74,17 +74,17 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Crear Compromiso</h4>
       </div>
-      {!!Form::open(['action' => 'CompromisosController@store', 'method' => 'POST'])!!}
+      {!!Form::open(['action' => array('CompromisosController@store', $sec), 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::label('', 'Líder')}}
-            {{Form::select('id_lider', $lideres, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar líder en '.$secNom.'...'])}}
+            {{Form::select('id_lider', $lideres, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar líder en '.$secNom.'...', 'required'])}}
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Descripción')}}
-            {{Form::text('descripcion', '', ['class' => 'form-control'])}}
+            {{Form::textarea('descripcion', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Cumplimiento')}}
-            {{Form::select('cumplimiento', ['1'=>'Cumplido', '0'=>'Pendiente'], null, ['class' => 'form-control'])}}
+            {{Form::select('cumplimiento', ['1'=>'Cumplido', '0'=>'Pendiente'], null, ['class' => 'form-control', 'required'])}}
             {{Form::label('', 'Costo')}}
             {{Form::number('costo', '', ['class' => 'form-control'])}}
           </div>
@@ -103,20 +103,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Crear Compromiso</h4>
+        <h4 class="modal-title" id="myModalLabel">Actualizar Compromiso</h4>
       </div>
       {!!Form::open(['action' => ['CompromisosController@update', 1], 'method' => 'POST'])!!}
         <div class="modal-body">
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
             {{Form::label('', 'Líder')}}
-            {{Form::select('id_lider', $lideres, null, ['id' => 'id_liderInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar líder'.$secNom.'...'])}}
+            {{Form::select('id_lider', $lideres, null, ['id' => 'id_liderInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar líder en '.$secNom.'...', 'required'])}}
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['id' => 'nombreInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Descripción')}}
-            {{Form::text('descripcion', '', ['id' => 'descripcionInput', 'class' => 'form-control'])}}
+            {{Form::textarea('descripcion', '', ['id' => 'descripcionInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Cumplimiento')}}
-            {{Form::select('cumplimiento', ['1'=>'Cumplido', '0'=>'Pendiente'], null, ['id' => 'cumplimientoInput', 'class' => 'form-control'])}}
+            {{Form::select('cumplimiento', ['1'=>'Cumplido', '0'=>'Pendiente'], null, ['id' => 'cumplimientoInput', 'class' => 'form-control', 'required'])}}
             {{Form::label('', 'Costo')}}
             {{Form::number('costo', '', ['id' => 'costoInput', 'class' => 'form-control'])}}
             {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}

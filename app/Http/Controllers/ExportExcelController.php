@@ -14,11 +14,26 @@ use App\Municipio;
 use App\Comuna;
 use App\Corporacion;
 use App\Visita;
+use App\PuestoVotacion;
 use App\Subregion;
 use DB;
 
 class ExportExcelController extends Controller
 {
+  public function __construct() {
+    $this->middleware('auth');
+    $this->middleware('rol:1,3,4');
+    $this->middleware('rol:1,3',['except' => ['filasElectoralesMapaAnt',
+                                              'filasElectoralesMapaMed',
+                                              'filasElectoralesMapaSub',
+                                              'lideresMapaAnt',
+                                              'lideresMapaMed',
+                                              'lideresMapaSub',
+                                              'resumenSub',
+                                              'resumenCom',
+                                              'exportar']]);
+  }
+
   public function filasElectoralesAnt () {
     $filasElectorales = FilaElectoral::join('municipios', 'fila_electorals.id_municipio', '=', 'municipios.id')
                                      ->join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
@@ -30,10 +45,10 @@ class ExportExcelController extends Controller
     $orden = array(
       ['Municipio', 'municipio_nombre'],
       ['Corporación', 'corporacion_nombre'],
-      ['Votos totales', 'votostotales'],
-      ['Votos candidato', 'votoscandidato'],
-      ['Votos partido', 'votospartido'],
       ['Potencial electoral', 'potencialelectoral'],
+      ['Votos totales', 'votostotales'],
+      ['Votos partido', 'votospartido'],
+      ['Votos candidato', 'votoscandidato'],
       ['Año', 'anio']
     );
 
@@ -53,10 +68,10 @@ class ExportExcelController extends Controller
     $orden = array(
       ['Comuna', 'comuna_nombre'],
       ['Corporación', 'corporacion_nombre'],
-      ['Votos totales', 'votostotales'],
-      ['Votos candidato', 'votoscandidato'],
-      ['Votos partido', 'votospartido'],
       ['Potencial electoral', 'potencialelectoral'],
+      ['Votos totales', 'votostotales'],
+      ['Votos partido', 'votospartido'],
+      ['Votos candidato', 'votoscandidato'],
       ['Año', 'anio']
     );
 
@@ -73,6 +88,7 @@ class ExportExcelController extends Controller
                     ->get();
 
     $orden = array(
+      ['Municipio', 'municipio_nombre'],
       ['Nombre', 'nombre'],
       ['Cédula', 'cedula'],
       ['Correo', 'correo'],
@@ -80,8 +96,7 @@ class ExportExcelController extends Controller
       ['Nivel', 'nivel'],
       ['Tipo de líder', 'tipolider'],
       ['Activo', 'activo'],
-      ['Votos estimados', 'votosestimados'],
-      ['Municipio', 'municipio_nombre']
+      ['Votos estimados', 'votosestimados']
     );
 
     $this->exportar($lideres, $orden, 9, 'Líderes en municipios');
@@ -89,12 +104,15 @@ class ExportExcelController extends Controller
 
   public function lideresMed () {
     $lideres = Lider::join('comunas', 'liders.id_comuna', '=', 'comunas.id')
-                    ->select('liders.*', 'comunas.nombre as comuna_nombre')
+                    ->join('puesto_votacions', 'liders.puesto_votacion_id', '=', 'puesto_votacions.id')
+                    ->join('barrios', 'puesto_votacions.barrio_id', '=', 'barrios.id')
+                    ->select('liders.*', 'comunas.nombre as comuna_nombre', 'puesto_votacions.nombre as puesto_votacion_nombre', 'barrios.nombre as barrio_nombre')
                     ->whereNotNull('id_comuna')
                     ->orderBy('nombre')
                     ->get();
 
     $orden = array(
+      ['Comuna', 'comuna_nombre'],
       ['Nombre', 'nombre'],
       ['Cédula', 'cedula'],
       ['Correo', 'correo'],
@@ -102,11 +120,12 @@ class ExportExcelController extends Controller
       ['Nivel', 'nivel'],
       ['Tipo de líder', 'tipolider'],
       ['Activo', 'activo'],
-      ['Votos estimados', 'votosestimados'],
-      ['Comuna', 'comuna_nombre']
+      ['Puesto de votación', 'puesto_votacion_nombre'],
+      ['Barrio', 'barrio_nombre'],
+      ['Votos estimados', 'votosestimados']
     );
 
-    $this->exportar($lideres, $orden, 9, 'Líderes en comunas');
+    $this->exportar($lideres, $orden, 11, 'Líderes en comunas');
   }
 
   public function compromisosAnt () {
@@ -170,6 +189,22 @@ class ExportExcelController extends Controller
     $this->exportar($visitas, $orden, 4, 'Visitas');
   }
 
+  public function puestos () {
+    $puestos = PuestoVotacion::join('comunas', 'puesto_votacions.comuna_id', '=', 'comunas.id')
+                             ->join('barrios', 'puesto_votacions.barrio_id', '=', 'barrios.id')
+                             ->select('puesto_votacions.*', 'comunas.nombre as comuna_nombre', 'barrios.nombre as barrio_nombre')
+                             ->get();
+
+    $orden = array(
+      ['Comuna', 'comuna_nombre'],
+      ['Barrio', 'barrio_nombre'],
+      ['Nombre', 'nombre'],
+      ['Mesas', 'mesas']
+    );
+
+    $this->exportar($puestos, $orden, 4, 'Puestos de votación');
+  }
+
   public function filasElectoralesMapaAnt ($id) {
     $filasElectorales = FilaElectoral::join('corporacions', 'fila_electorals.id_corporacion', '=', 'corporacions.id')
                                      ->select('fila_electorals.*', 'corporacions.nombre as corporacion')
@@ -179,10 +214,10 @@ class ExportExcelController extends Controller
     
     $orden = array(
       ['Corporación', 'corporacion'],
+      ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
-      ['Votos candidato', 'votoscandidato'],
       ['Votos partido', 'votospartido'],
-      ['Potencial electoral', 'potencialelectoral']
+      ['Votos candidato', 'votoscandidato']
     );
 
     $this->exportar($filasElectorales, $orden, 5, 'Info. '.(Municipio::find($id))->nombre);
@@ -197,10 +232,10 @@ class ExportExcelController extends Controller
     
     $orden = array(
       ['Corporación', 'corporacion'],
+      ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
-      ['Votos candidato', 'votoscandidato'],
       ['Votos partido', 'votospartido'],
-      ['Potencial electoral', 'potencialelectoral']
+      ['Votos candidato', 'votoscandidato']
     );
 
     $this->exportar($filasElectorales, $orden, 5, 'Inf. '.Comuna::find($id)->nombre);
@@ -224,10 +259,10 @@ class ExportExcelController extends Controller
     
     $orden = array(
       ['Corporación', 'corporacion_nombre'],
+      ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
-      ['Votos candidato', 'votoscandidato'],
       ['Votos partido', 'votospartido'],
-      ['Potencial electoral', 'potencialelectoral']
+      ['Votos candidato', 'votoscandidato']
     );
 
     $this->exportar($filasElectorales, $orden, 5, 'Info. Subregión '.Subregion::find($id)->nombre);
@@ -253,7 +288,10 @@ class ExportExcelController extends Controller
   }
 
   public function lideresMapaMed ($id) {
-    $lideres = Lider::where('id_comuna', '=', $id)
+    $lideres = Lider::join('puesto_votacions', 'liders.puesto_votacion_id', '=', 'puesto_votacions.id')
+                    ->join('barrios', 'puesto_votacions.barrio_id', '=', 'barrios.id')
+                    ->select('liders.*', 'puesto_votacions.nombre as puesto_nombre', 'barrios.nombre as barrio_nombre')
+                    ->where('id_comuna', '=', $id)
                     ->orderBy('nombre')
                     ->get();
 
@@ -265,10 +303,12 @@ class ExportExcelController extends Controller
       ['Nivel', 'nivel'],
       ['Tipo de líder', 'tipolider'],
       ['Activo', 'activo', 'Activo', 'Inactivo'],
+      ['Puesto de votación', 'puesto_nombre'],
+      ['Barrio', 'barrio_nombre'],
       ['Votos estimados', 'votosestimados']
     );
 
-    $this->exportar($lideres, $orden, 8, 'Líd. '.Comuna::find($id)->nombre);
+    $this->exportar($lideres, $orden, 10, 'Líd. '.Comuna::find($id)->nombre);
   }
 
   public function lideresMapaSub ($id) {
@@ -296,6 +336,20 @@ class ExportExcelController extends Controller
     );
 
     $this->exportar($lideres, $orden, 9, 'Líds. Subregión '.Subregion::find($id)->nombre);
+  }
+
+  public function puestosMapaMed ($id) {
+    $puestos = PuestoVotacion::join('barrios', 'puesto_votacions.barrio_id', '=', 'barrios.id')
+                             ->select('puesto_votacions.*', 'barrios.nombre as barrio_nombre')
+                             ->where('puesto_votacions.comuna_id', '=', $id)->get();
+
+    $orden = array(
+      ['Nombre', 'nombre'],
+      ['Mesas', 'mesas'],
+      ['Barrio', 'barrio_nombre']
+    );
+
+    $this->exportar($puestos, $orden, 3, 'Ps-'.Comuna::find($id)->nombre);
   }
 
   public function resumenSub (Request $request) {
@@ -365,11 +419,11 @@ class ExportExcelController extends Controller
 
     $orden = array (
       ['Nombre', 'nombre'],
-      ['Votos candidato', 'votoscandidato'],
-      ['Votos partido', 'votospartido'],
+      ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
-      ['Votos estimados', 'votosestimados'],
-      ['Potencial electoral', 'potencialelectoral']
+      ['Votos partido', 'votospartido'],
+      ['Votos candidato', 'votoscandidato'],
+      ['Votos estimados', 'votosestimados']
     );
 
     $this->exportar($comunas, $orden, 6, 'Resumen por comuna');

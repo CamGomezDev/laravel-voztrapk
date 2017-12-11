@@ -4,6 +4,7 @@
     "/js/visitas.js": "/js/visitas.js",
     "/js/usuarios.js": "/js/usuarios.js",
     "/js/roles.js": "/js/roles.js",
+    "/js/puestosvotacion.js": "/js/puestosvotacion.js",
     "/js/permisos.js": "/js/permisos.js",
     "/js/lideres.js": "/js/lideres.js",
     "/js/infoelectoral.js": "/js/infoelectoral.js",

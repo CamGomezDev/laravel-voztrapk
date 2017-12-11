@@ -13,21 +13,15 @@ class MirarRol
      * @param  \Closure  $next
      * @return mixed
      */
+
+    // Recibe como argumento los roles permitidos, y revisar si el 
+    // usuario tiene alguno de ellos.
     public function handle($request, Closure $next, ...$roles)
     {
-      $tieneRol = false;
-      foreach ($roles as $rol) {
-        if(!$request->user()->tieneRol($rol) && !$tieneRol) {
-          $tieneRol = false;
-        } else {
-          $tieneRol = true;
-        }
+      // $tieneRol está definida en la clase User
+      if (!$request->user()->tieneRol($roles)) {
+        return redirect($request->user()->entrada());
       }
-
-      if ($tieneRol) {
-        return $next($request);
-      }
-
-      return redirect($request->user()->entrada());
+      return $next($request);
     }
 }

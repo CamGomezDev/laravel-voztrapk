@@ -3,6 +3,7 @@ var posSvg;
 var svgDoc;
 var svgComunas;
 var comColor;
+var strWidth;
 var aElementComproId;
 var cuadder = 0;
 var cuadsur = 0;
@@ -16,8 +17,8 @@ $(window).on("load", function () {
   if (comSelec) {
     conseguirFilasElectorales(1, 5);
     conseguirLideres(1, 5)
-    cuadder = 70;
-    cuadsur = 130;
+    cuadder = 100;
+    cuadsur = 135;
   }
 
   $('#irabajo').click(function () {
@@ -92,7 +93,7 @@ function InicMapaMedellin () {
     if (comSelec == (svgComunas[i]).id) {
       $(svgComunas[i]).attr("style", "fill: #2665e2!important");
       $(svgComunas[i]).attr("stroke", "black");      
-      $(svgComunas[i]).attr("stroke-width", "1.2");
+      $(svgComunas[i]).attr("stroke-width", "0.7");
     }
 		$(svgComunas[i]).hover(function(){
 			for (var a = 0; a < comunasDatos.length; a++) {
@@ -112,7 +113,7 @@ function InicMapaMedellin () {
 		}, function(){
 		  $('#hoveringTooltip').remove();
 		}).mousemove(function(e) {
-      var posX = e.pageX + posSvg.left - 150 + cuadder;
+      var posX = e.pageX + posSvg.left - 130 + cuadder;
 			var posY = e.pageY + posSvg.top - 115 + cuadsur;
 			$('#hoveringTooltip').css({ top: posY, left: posX});
 		});
@@ -127,9 +128,10 @@ function resaltarMun (idcom) {
   for (var i = 0; i < svgComunas.length; i++) {
     if (idcom == svgComunas[i].id.split("-")[0]) {
       munColor = $(svgComunas[i]).css("fill");
+      strWidth = $(svgComunas[i]).css("stroke-with");
       $(svgComunas[i]).attr("style", "fill:#2665e2!important");
       $(svgComunas[i]).attr("stroke", "black");      
-      $(svgComunas[i]).attr("stroke-width", "1.2");
+      $(svgComunas[i]).attr("stroke-width", "0.6");
     }
   }
 }
@@ -138,8 +140,8 @@ function atenuarMun (idcom) {
   for (var i = 0; i < svgComunas.length; i++) {
     if (idcom == svgComunas[i].id.split("-")[0]) {
       $(svgComunas[i]).attr("style", "fill:"+munColor);
-      $(svgComunas[i]).attr("stroke", "black");
-      $(svgComunas[i]).attr("stroke-width", "0.5102362");
+      $(svgComunas[i]).attr("stroke", "#1f1f1f");
+      $(svgComunas[i]).attr("stroke-width", strWidth);
     }
   }
 }

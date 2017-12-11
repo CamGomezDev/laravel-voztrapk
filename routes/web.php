@@ -21,7 +21,6 @@ Route::post('/Mapa/Ant/poblacion', 'MapaAntController@poblacion');
 
 Route::get('/Mapa/Subregion/{id}', 'MapaAntController@subregion');
 
-
 Route::get('/Mapa/Med', 'MapaMedController@index');
 Route::get('/Mapa/Med/conseguir', 'MapaMedController@conseguir');
 Route::get('/Mapa/Med/busquedaSVG', 'MapaMedController@busquedaSVG');
@@ -58,19 +57,24 @@ Route::put('/Administracion/{sec}/Lideres', 'LideresController@update');
 Route::delete('/Administracion/Lideres', 'LideresController@destroy');
 
 Route::get('/Administracion/{sec}/Compromisos', 'CompromisosController@index');
-Route::post('/Administracion/Compromisos', 'CompromisosController@store');
+Route::post('/Administracion/{sec}/Compromisos', 'CompromisosController@store');
 Route::put('/Administracion/Compromisos', 'CompromisosController@update');
 Route::delete('/Administracion/Compromisos', 'CompromisosController@destroy');
 
 Route::get('/Administracion/{sec}/Corporaciones', 'CorporacionesController@index');
-Route::post('/Administracion/Corporaciones', 'CorporacionesController@store');
+Route::post('/Administracion/{sec}/Corporaciones', 'CorporacionesController@store');
 Route::put('/Administracion/Corporaciones', 'CorporacionesController@update');
 Route::delete('/Administracion/Corporaciones', 'CorporacionesController@destroy');
 
 Route::get('/Administracion/{sec}/Visitas', 'VisitasController@index');
-Route::post('/Administracion/Visitas', 'VisitasController@store');
+Route::post('/Administracion/{sec}/Visitas', 'VisitasController@store');
 Route::put('/Administracion/Visitas', 'VisitasController@update');
 Route::delete('/Administracion/Visitas', 'VisitasController@destroy');
+
+Route::get('/Administracion/{sec}/PuestosVotacion', 'PuestosVotacionController@index');
+Route::post('/Administracion/PuestosVotacion', 'PuestosVotacionController@store');
+Route::put('/Administracion/PuestosVotacion', 'PuestosVotacionController@update');
+Route::delete('/Administracion/PuestosVotacion', 'PuestosVotacionController@destroy');
 
 Route::get('/Ajustes/Usuarios', 'UsersController@index');
 Route::post('/Ajustes/Usuarios', 'UsersController@store');
@@ -91,8 +95,10 @@ Route::get('/ExportarCompromisosAnt', 'ExportExcelController@compromisosAnt');
 Route::get('/ExportarCompromisosMed', 'ExportExcelController@compromisosMed');
 Route::get('/ExportarCorporaciones', 'ExportExcelController@corporaciones');
 Route::get('/ExportarVisitas', 'ExportExcelController@visitas');
+Route::get('/ExportarPuestos', 'ExportExcelController@puestos');
 Route::get('/ExportarUsuarios', 'ExportExcelController@usuarios');
 Route::get('/ExportarRoles', 'ExportExcelController@roles');
+Route::get('/ExportarPuestosMapaMed/{id}', 'ExportExcelController@puestosMapaMed');
 Route::get('/ExportarLideresMapaAnt/{id}', 'ExportExcelController@lideresMapaAnt');
 Route::get('/ExportarLideresMapaMed/{id}', 'ExportExcelController@lideresMapaMed');
 //Truco sucio que funciona por suerte (la ruta /ExportarLideresMapaSubregion no da)

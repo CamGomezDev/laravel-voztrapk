@@ -14,10 +14,10 @@
           <tr>
             <th>{{($sec == 'Med') ? 'Comuna' : 'Municipio'}}</th>
             <th>Corporación</th>
-            <th>Votos totales</th>
-            <th>Votos candidato</th>
-            <th>Votos partido</th>
             <th>Potencial electoral</th>
+            <th>Votos totales</th>
+            <th>Votos partido</th>
+            <th>Votos candidato</th>
             <th>Año</th>
             <th>Acciones</th>
           </tr>
@@ -28,10 +28,10 @@
           <tr>
             <td>{{($sec == 'Med') ? $filaElectoral->comuna->nombre : $filaElectoral->municipio->nombre}}</td>
             <td>{{$filaElectoral->corporacion->nombre}}</td>
-            <td>{{$filaElectoral->votostotales}}</td>
-            <td>{{$filaElectoral->votoscandidato}}</td>
-            <td>{{$filaElectoral->votospartido}}</td>
             <td>{{$filaElectoral->potencialelectoral}}</td>
+            <td>{{$filaElectoral->votostotales}}</td>
+            <td>{{$filaElectoral->votospartido}}</td>
+            <td>{{$filaElectoral->votoscandidato}}</td>
             <td>{{$filaElectoral->anio}}</td>
             <td style="text-align: center">
               <h4 style="margin: 0;">
@@ -39,10 +39,10 @@
                   data-id=                "{{$filaElectoral->id}}"
                   data-id_municipio=      "{{($sec == 'Med') ? $filaElectoral->comuna->id : $filaElectoral->municipio->id}}"
                   data-id_corporacion=    "{{$filaElectoral->corporacion->id}}"
-                  data-votostotales=      "{{$filaElectoral->votostotales}}"
-                  data-votoscandidato=    "{{$filaElectoral->votoscandidato}}"
-                  data-votospartido=      "{{$filaElectoral->votospartido}}"
                   data-potencialelectoral="{{$filaElectoral->potencialelectoral}}"
+                  data-votostotales=      "{{$filaElectoral->votostotales}}"
+                  data-votospartido=      "{{$filaElectoral->votospartido}}"
+                  data-votoscandidato=    "{{$filaElectoral->votoscandidato}}"
                   data-anio=              "{{$filaElectoral->anio}}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px"></i></a>
                 <a type="button" data-toggle="modal" data-target="#ModalEliminar" data-id="{{$filaElectoral->id}}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
               </h4>
@@ -84,19 +84,19 @@
         <div class="modal-body">
           <div class="form-group">
             {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
-            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...'])}}
+            {{Form::select('id_municipio', $seclista, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...', 'required'])}}
             {{Form::label('', 'Corporación')}}
-            {{Form::select('id_corporacion', $corporaciones, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar corporación...'])}}
-            {{Form::label('', 'Votos totales')}}
-            {{Form::number('votostotales', '', ['class' => 'form-control'])}}
-            {{Form::label('', 'Votos candidato')}}
-            {{Form::number('votoscandidato', '', ['class' => 'form-control'])}}
-            {{Form::label('', 'Votos partido')}}
-            {{Form::number('votospartido', '', ['class' => 'form-control'])}}
+            {{Form::select('id_corporacion', $corporaciones, null, ['class' => 'form-control', 'placeholder' => 'Seleccionar corporación...', 'required'])}}
             {{Form::label('', 'Potencial electoral')}}
             {{Form::number('potencialelectoral', '', ['class' => 'form-control'])}}
+            {{Form::label('', 'Votos totales')}}
+            {{Form::number('votostotales', '', ['class' => 'form-control'])}}
+            {{Form::label('', 'Votos partido')}}
+            {{Form::number('votospartido', '', ['class' => 'form-control'])}}
+            {{Form::label('', 'Votos candidato')}}
+            {{Form::number('votoscandidato', '', ['class' => 'form-control'])}}
             {{Form::label('', 'Año')}}
-            {{Form::number('anio', '', ['class' => 'form-control'])}}
+            {{Form::number('anio', '', ['class' => 'form-control', 'required'])}}
           </div>
         </div>
         <div class="modal-footer">
@@ -120,19 +120,19 @@
           <div class="form-group">
             {{Form::hidden('id', '', ['id' => 'idInput'])}}
             {{Form::label('', ($sec == 'Med') ? 'Comuna' : 'Municipio')}}
-            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.($sec == 'Med') ? 'comuna' : 'municipio'.'...'])}}
+            {{Form::select('id_municipio', $seclista, null, ['id' => 'id_municipioInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar '.(($sec == 'Med') ? 'comuna' : 'municipio').'...', 'required'])}}
             {{Form::label('', 'Corporación')}}
-            {{Form::select('id_corporacion', $corporaciones, null, ['id' => 'id_corporacionInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar corporación...'])}}
-            {{Form::label('', 'Votos totales')}}
-            {{Form::number('votostotales', '', ['id' => 'votostotalesInput', 'class' => 'form-control'])}}
-            {{Form::label('', 'Votos candidato')}}
-            {{Form::number('votoscandidato', '', ['id' => 'votoscandidatoInput', 'class' => 'form-control'])}}
-            {{Form::label('', 'Votos partido')}}
-            {{Form::number('votospartido', '', ['id' => 'votospartidoInput', 'class' => 'form-control'])}}
+            {{Form::select('id_corporacion', $corporaciones, null, ['id' => 'id_corporacionInput', 'class' => 'form-control', 'placeholder' => 'Seleccionar corporación...', 'required'])}}
             {{Form::label('', 'Potencial electoral')}}
             {{Form::number('potencialelectoral', '', ['id' => 'potencialelectoralInput', 'class' => 'form-control'])}}
+            {{Form::label('', 'Votos totales')}}
+            {{Form::number('votostotales', '', ['id' => 'votostotalesInput', 'class' => 'form-control'])}}
+            {{Form::label('', 'Votos partido')}}
+            {{Form::number('votospartido', '', ['id' => 'votospartidoInput', 'class' => 'form-control'])}}
+            {{Form::label('', 'Votos candidato')}}
+            {{Form::number('votoscandidato', '', ['id' => 'votoscandidatoInput', 'class' => 'form-control'])}}
             {{Form::label('', 'Año')}}
-            {{Form::number('anio', '', ['id' => 'anioInput', 'class' => 'form-control'])}}
+            {{Form::number('anio', '', ['id' => 'anioInput', 'class' => 'form-control', 'required'])}}
             {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}
             {{Form::hidden('_method', 'PUT')}}
           </div>

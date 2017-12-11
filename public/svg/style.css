@@ -4,7 +4,7 @@ body {
 
 
 path:hover {
-	stroke-width: 1.2!important;
+	stroke-width: 0.7!important;
 	fill: #2665e2!important;
 	transition: fill 0.2s, stroke-width 0.0s;
 }

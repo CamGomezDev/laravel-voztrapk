@@ -3,6 +3,7 @@ var posSvg;
 var svgDoc;
 var svgMunicipios;
 var munColor;
+var strWidth;
 var aElementComproId;
 
 $(window).on("load", function () {
@@ -74,7 +75,7 @@ function InicMapaAntioquia () {
     if (munSelec == (svgMunicipios[i]).id.split("-")[0]) {
       $(svgMunicipios[i]).attr("style", "fill: #2665e2!important");
       $(svgMunicipios[i]).attr("stroke", "black");      
-      $(svgMunicipios[i]).attr("stroke-width", "1.2");
+      $(svgMunicipios[i]).attr("stroke-width", "0.7");
     }
 		$(svgMunicipios[i]).hover(function(){
 			for (var a = 0; a < municipiosDatos.length; a++) {
@@ -109,9 +110,10 @@ function resaltarMun (idmun) {
   for (var i = 0; i < svgMunicipios.length; i++) {
     if (idmun == svgMunicipios[i].id.split("-")[0]) {
       munColor = $(svgMunicipios[i]).css("fill");
+      strWidth = $(svgMunicipios[i]).css("stroke-width");
       $(svgMunicipios[i]).attr("style", "fill:#2665e2!important");
       $(svgMunicipios[i]).attr("stroke", "black");      
-      $(svgMunicipios[i]).attr("stroke-width", "1.2");
+      $(svgMunicipios[i]).attr("stroke-width", "0.6");
     }
   }
 }
@@ -121,7 +123,7 @@ function atenuarMun (idmun) {
     if (idmun == svgMunicipios[i].id.split("-")[0]) {
       $(svgMunicipios[i]).attr("style", "fill:"+munColor);
       $(svgMunicipios[i]).attr("stroke", "black");
-      $(svgMunicipios[i]).attr("stroke-width", "0.5102362");
+      $(svgMunicipios[i]).attr("stroke-width", strWidth);
     }
   }
 }

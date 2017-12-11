@@ -28,7 +28,7 @@ class MapaMedController extends Controller
       $comunaAc = null;
     }
 
-    $comunas = Comuna::select('id', 'nombre', 'mesas', 'barrios', 'puestos')->get();
+    $comunas = Comuna::select('id', 'nombre')->get();
 
     foreach ($comunas as $comuna) {
       if (count($comuna->fila_electorals)) {
@@ -176,9 +176,11 @@ class MapaMedController extends Controller
                           ->orderBy('anio', 'desc')->get();
 
     if($request->has('anio')) {
-      $anio = $request->get('anio');
+      $anioOrig = $request->get('anio');
+      $anio = DB::connection()->getPdo()->quote($anioOrig);
     } else {
       $anio = $anios[0]->anio;
+      $anioOrig = $anio;
     }
 
     $comunas = Comuna::get();
@@ -206,7 +208,7 @@ class MapaMedController extends Controller
     $corporaciones = Corporacion::get();
 
     return view('pags.mapa.comunas')->with('comunas', $comunas)
-                                    ->with('anio', $anio)
+                                    ->with('anio', $anioOrig)
                                     ->with('anios', $anios)
                                     ->with('idcorp', $idcorpOrig)
                                     ->with('corp', $corp)

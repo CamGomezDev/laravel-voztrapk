@@ -135,7 +135,7 @@
       </div>
       {!!Form::open(['action' => 'UsersController@destroy', 'method' => 'POST'])!!}
         <div class="modal-body">
-	      	<p>¿Seguro que desea eliminar este usuario, removiendo todo su acceso?</p>
+	      	<p>¿Seguro que desea eliminar este usuario, removiendo así todo su acceso?</p>
 	      	{{Form::hidden('id', '', ['id' => 'idInput'])}}
           {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}
 	      </div>

@@ -17,4 +17,8 @@ class Lider extends Model
   public function compromisos() {
     return $this->hasMany('App\Compromiso');
   }
+
+  public function puesto_votacion() {
+    return $this->belongsTo('App\PuestoVotacion', 'puesto_votacion_id', 'id');
+  }
 }

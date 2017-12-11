@@ -60,20 +60,20 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 45);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 45:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(46);
+module.exports = __webpack_require__(44);
 
 
 /***/ }),
 
-/***/ 46:
+/***/ 44:
 /***/ (function(module, exports) {
 
 $(window).on('load', function () {
@@ -90,6 +90,9 @@ $(window).on('load', function () {
 		var activo = button.data('activo');
 		var votosestimados = button.data('votosestimados');
 		var id_municipio = button.data('id_municipio');
+		if (button.data('puesto')) {
+			var puesto = button.data('puesto');
+		}
 
 		var modal = $(this);
 		modal.find('.modal-body #idInput').val(id);
@@ -102,6 +105,9 @@ $(window).on('load', function () {
 		modal.find('.modal-body #activoInput').val(activo);
 		modal.find('.modal-body #votosestimadosInput').val(votosestimados);
 		modal.find('.modal-body #id_municipioInput').val(id_municipio);
+		if (button.data('puesto')) {
+			modal.find('.modal-body #puestoInput').val(puesto);
+		}
 	});
 
 	$("#ModalEliminar").on('show.bs.modal', function (event) {

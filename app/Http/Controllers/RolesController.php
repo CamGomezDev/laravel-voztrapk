@@ -25,12 +25,12 @@ class RolesController extends AjustesController
       $q = $request->get('q');
       $roles = Rol::where('nombre', 'LIKE', '%'.$q.'%')
                   ->orWhere('descripcion', 'LIKE', '%'.$q.'%')
-                  ->orderBy('nombre')->paginate($rows);
+                  ->paginate($rows);
       
       $totRows = Rol::where('nombre', 'LIKE', '%'.$q.'%')
                     ->orWhere('descripcion', 'LIKE', '%'.$q.'%')->count();
     } else {
-      $roles   = Rol::orderBy('nombre')->paginate($rows);
+      $roles   = Rol::paginate($rows);
       $totRows = Rol::count();
     }
 

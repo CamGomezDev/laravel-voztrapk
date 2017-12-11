@@ -8373,6 +8373,10 @@ td,
   border-radius: 1px;
 }
 
+table {
+  margin-top: 0px !important;
+}
+
 table.table-bordered {
   border: 0.5px solid #bebebe;
   margin-top: 20px;

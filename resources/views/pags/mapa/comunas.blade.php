@@ -4,9 +4,9 @@
       <form action="../ExportarResumenCom" method="GET">
         <input type="hidden" name="id_corporacion" value="{{$idcorp}}">
         <input type="hidden" name="anio" value="{{$anio}}">
-        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px;margin-right:5px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
-      <span>&nbspResumen por comuna - Votación para</span>
+      <span>Resumen por comuna - Votación para</span>
     </h4>
     <h4 class="vcenter-parent pull-left" style="margin-left: 5px; text-align: left">
       <span style="display: inline-block;">
@@ -16,7 +16,7 @@
           </button>
           <ul class="dropdown-menu" style="margin: 0px; padding: 0px; border-radius: 2px">
           @foreach($corporaciones as $corporacion)
-            @if($corporacion->id !== $idcorp)
+            @if($corporacion->id != $idcorp)
             <li>
               <a href=# style="margin: 3px; padding: 3px;" onclick="conseguirResumen({{$corporacion->id}},{{$anio}}); return false">
                 <h4 style="margin: 0px; padding: 0px">
@@ -37,7 +37,7 @@
           </button>
           <ul class="dropdown-menu" style="margin: 0px; padding: 0px; border-radius: 2px">
           @foreach($anios as $anioi)
-            @if($anioi->anio !== $anio)
+            @if($anioi->anio != $anio)
             <li><a href=# style="margin: 3px; padding: 3px;" onclick="conseguirResumen({{$idcorp}},{{$anioi->anio}}); return false">{{$anioi->anio}}</a></li>
             @endif
           @endforeach
@@ -51,22 +51,22 @@
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Votos totales</th>
-          <th>Votos candidato</th>
-          <th>Votos partido</th>
-          <th>Votos estimados</th>
           <th>Potencial electoral</th>
+          <th>Votos totales</th>
+          <th>Votos partido</th>
+          <th>Votos candidato</th>
+          <th>Votos estimados</th>
         </tr>
       </thead>
       <tbody>
       @foreach($comunas as $comuna)
         <tr>
           <td><a href="?c={{$comuna->id}}">{{$comuna->nombre}}</a></td>
-          <td>{{$comuna->votostotales}}</td>
-          <td>{{$comuna->votoscandidato}}</td>
-          <td>{{$comuna->votospartido}}</td>
-          <td>{{$comuna->votosestimados}}</td>
           <td>{{$comuna->potencialelectoral}}</td>
+          <td>{{$comuna->votostotales}}</td>
+          <td>{{$comuna->votospartido}}</td>
+          <td>{{$comuna->votoscandidato}}</td>
+          <td>{{$comuna->votosestimados}}</td>
         </tr>
       @endforeach
       </tbody>

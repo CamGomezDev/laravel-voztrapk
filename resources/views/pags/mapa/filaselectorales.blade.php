@@ -4,9 +4,9 @@
       <form class="pull-left" action="../ExportarFilasElectoralesMapa{{Request::segment(2)}}/{{$idcosa}}" method="GET">
         <input type="hidden" name="municnombre" value="">
         <input type="hidden" name="municid" value="">
-        <button type="submit" class="btn btn-custom" style="padding-right:7px; padding-left:7px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
+        <button type="submit" class="btn btn-custom" style="padding-right:7px;padding-left:7px;margin-right:5px" name="exportarInfosElectoralesMapa"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
-      &nbspInformación Electoral - {{$cosafrase}}
+      Información Electoral - {{$cosafrase}}
     </h4>
     @if($editar)
     <div class="vcenter-parent pull-right" style="margin-left:auto;">
@@ -20,10 +20,10 @@
       <thead>
         <tr>
           <th>Corporación</th>
-          <th>Votos totales</th>
-          <th>Votos candidato</th>
-          <th>Votos partido</th>
           <th>Potencial electoral</th>
+          <th>Votos totales</th>
+          <th>Votos partido</th>
+          <th>Votos candidato</th>
           <th>Año</th>
         </tr>
       </thead>
@@ -36,10 +36,10 @@
       @foreach($filasElectorales as $filaElectoral)
         <tr>
           <td>{{$filaElectoral->corporacion->nombre}}</td>
-          <td>{{$filaElectoral->votostotales}}</td>
-          <td>{{$filaElectoral->votoscandidato}}</td>
-          <td>{{$filaElectoral->votospartido}}</td>
           <td>{{$filaElectoral->potencialelectoral}}</td>
+          <td>{{$filaElectoral->votostotales}}</td>
+          <td>{{$filaElectoral->votospartido}}</td>
+          <td>{{$filaElectoral->votoscandidato}}</td>
           <td>{{$filaElectoral->anio}}</td>
         </tr>
       @endforeach
