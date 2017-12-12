@@ -172,7 +172,7 @@ class LideresController extends AdministracionController
   {
     $lider = Lider::find($request->input('id'));
 
-    if ($lider->has('compromisos')) {
+    if (count($lider->compromisos)) {
       return redirect($request->input('ruta'))->with('error', 'Este líder tiene compromisos asignados. No se podrá eliminar si no están removidos.');
     } else {
       $lider->delete();

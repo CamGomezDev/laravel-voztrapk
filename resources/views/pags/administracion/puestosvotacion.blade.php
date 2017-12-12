@@ -131,7 +131,7 @@
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['class' => 'form-control', 'required'])}}
             {{Form::label('', 'Número de mesas')}}
-            {{Form::number('mesas', '', ['class' => 'form-control', 'required'])}}
+            {{Form::number('mesas', '', ['class' => 'form-control'])}}
           </div>
         </div>
         <div class="modal-footer">
@@ -161,7 +161,7 @@
             {{Form::label('', 'Nombre')}}
             {{Form::text('nombre', '', ['id' => 'nombreInput', 'class' => 'form-control', 'required'])}}
             {{Form::label('', 'Número de mesas')}}
-            {{Form::number('mesas', '', ['id' => 'mesasInput', 'class' => 'form-control', 'required'])}}
+            {{Form::number('mesas', '', ['id' => 'mesasInput', 'class' => 'form-control'])}}
             {{Form::hidden('ruta', url()->current()."?".http_build_query($_GET))}}
             {{Form::hidden('_method', 'PUT')}}
           </div>

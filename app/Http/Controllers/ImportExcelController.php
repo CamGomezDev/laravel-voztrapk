@@ -34,7 +34,7 @@ class ImportExcelController extends Controller
     error_reporting(E_ALL);
     set_time_limit(0);
 
-    $objPHPExcel = PHPExcel_IOFactory::load('storage\\imports\\'.$fileNameWithExt);
+    $objPHPExcel = PHPExcel_IOFactory::load('storage/imports/'.$fileNameWithExt);
     
     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 

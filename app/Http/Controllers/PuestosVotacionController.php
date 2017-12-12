@@ -25,7 +25,7 @@ class PuestosVotacionController extends AdministracionController
 
     if ($request->has('c')) {
       $id = $request->get('c');
-      if ($id > 0 && $id < 17) {
+      if ($id > 0 && $id < 22) {
         $puestosvotacion = PuestoVotacion::where('comuna_id', '=', $id)
                                          ->orderBy('nombre')->paginate($rows);
         $totRows = PuestoVotacion::where('comuna_id', '=', $id)->count();
@@ -33,7 +33,7 @@ class PuestosVotacionController extends AdministracionController
       } else {
         $puestosvotacion = PuestoVotacion::orderBy('comuna_id')->orderBy('nombre')->paginate($rows);
         $comuna = null;
-        $totRows = PuestoVotaccion::count();
+        $totRows = PuestoVotacion::count();
       }
     } else {
       $puestosvotacion = PuestoVotacion::orderBy('comuna_id')->orderBy('nombre')->paginate($rows);
@@ -110,8 +110,13 @@ class PuestosVotacionController extends AdministracionController
   public function destroy(Request $request)
   {
     $puesto = PuestoVotacion::find($request->input('id'));
-    $puesto->delete();
 
-    return redirect($request->input('ruta'))->with('success', 'Puesto de votación eliminado');
+    if(count($puesto->liders)) {
+      return redirect($request->input('ruta'))->with('error', 'Este puesto tiene líderes asignados. No se podrá eliminar si no están removidos.');
+    } else {
+      $puesto->delete();
+      return redirect($request->input('ruta'))->with('success', 'Puesto de votación eliminado');
+    }
+
   }
 }

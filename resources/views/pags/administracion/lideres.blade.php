@@ -67,7 +67,7 @@
           @endforeach
         @else
           <tr>
-            <td colspan="{{($sec == 'Med') ? '11' : 10}}">No se encontraron resultados</td>
+            <td colspan="{{($sec == 'Med') ? '12' : 10}}">No se encontraron resultados</td>
           </tr>
         @endif
         </tbody>

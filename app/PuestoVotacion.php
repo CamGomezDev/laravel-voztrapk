@@ -15,6 +15,6 @@ class PuestoVotacion extends Model
     }
 
     public function liders() {
-        return $this->hasMany('App\PuestoVotacion');
+        return $this->hasMany('App\Lider');
     }
 }

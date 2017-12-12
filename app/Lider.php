@@ -15,7 +15,7 @@ class Lider extends Model
   }
 
   public function compromisos() {
-    return $this->hasMany('App\Compromiso');
+    return $this->hasMany('App\Compromiso', 'id_lider');
   }
 
   public function puesto_votacion() {

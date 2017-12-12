@@ -56,7 +56,7 @@ class CorporacionesController extends AdministracionController
 
     $corporacion->save();
 
-    return redirect('/Administracion/Corporaciones')->with('success', 'Corporación creada');
+    return redirect($request->path())->with('success', 'Corporación creada');
   }
 
   /**
