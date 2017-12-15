@@ -90,7 +90,7 @@ class CorporacionesController extends AdministracionController
   public function destroy(Request $request)
   {
     $corporacion = Corporacion::find($request->input('id'));
-    if ($corporacion->has('fila_electorals')) {
+    if (count($corporacion->fila_electorals) > 0) {
       return redirect($request->input('ruta'))->with('error', 'Esta corporación tiene filas electorales asignadas. No se podrá eliminar hasta que estén removidas.');
     }
     $corporacion->delete();

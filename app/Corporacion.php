@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Corporacion extends Model
 {
   public function fila_electorals () {
-    return $this->hasMany('App\FilaElectoral');
+    return $this->hasMany('App\FilaElectoral', 'id_corporacion');
   }
 }

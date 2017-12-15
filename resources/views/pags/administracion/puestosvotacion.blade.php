@@ -94,7 +94,6 @@
         </tbody>
       </table>
     </div>
-    @if($idcom)
     <?php
     $queryString = [];
     if (isset($_GET['q'])) {
@@ -109,7 +108,6 @@
     ?>
     {{$puestosvotacion->appends($queryString)->links()}}
     @include('inc.filas')
-    @endif
   </div>
 </div>
 

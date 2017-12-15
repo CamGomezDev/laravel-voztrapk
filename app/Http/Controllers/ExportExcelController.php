@@ -217,10 +217,11 @@ class ExportExcelController extends Controller
       ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
       ['Votos partido', 'votospartido'],
-      ['Votos candidato', 'votoscandidato']
+      ['Votos candidato', 'votoscandidato'],
+      ['Año', 'anio']
     );
 
-    $this->exportar($filasElectorales, $orden, 5, 'Info. '.(Municipio::find($id))->nombre);
+    $this->exportar($filasElectorales, $orden, 6, 'Info. '.(Municipio::find($id))->nombre);
   }
 
   public function filasElectoralesMapaMed ($id) {
@@ -235,10 +236,11 @@ class ExportExcelController extends Controller
       ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
       ['Votos partido', 'votospartido'],
-      ['Votos candidato', 'votoscandidato']
+      ['Votos candidato', 'votoscandidato'],
+      ['Año', 'anio']
     );
 
-    $this->exportar($filasElectorales, $orden, 5, 'Inf. '.Comuna::find($id)->nombre);
+    $this->exportar($filasElectorales, $orden, 6, 'Inf. '.Comuna::find($id)->nombre);
   }
 
   public function filasElectoralesMapaSub ($id) {
@@ -262,10 +264,11 @@ class ExportExcelController extends Controller
       ['Potencial electoral', 'potencialelectoral'],
       ['Votos totales', 'votostotales'],
       ['Votos partido', 'votospartido'],
-      ['Votos candidato', 'votoscandidato']
+      ['Votos candidato', 'votoscandidato'],
+      ['Año', 'anio']
     );
 
-    $this->exportar($filasElectorales, $orden, 5, 'Info. Subregión '.Subregion::find($id)->nombre);
+    $this->exportar($filasElectorales, $orden, 6, 'Info. Subregión '.Subregion::find($id)->nombre);
   }
 
   public function lideresMapaAnt ($id) {
@@ -526,7 +529,7 @@ class ExportExcelController extends Controller
     header('Pragma: public'); // HTTP/1.0
 
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    ob_end_clean();
+    // ob_end_clean();
     $objWriter->save('php://output');
     exit;
   }
