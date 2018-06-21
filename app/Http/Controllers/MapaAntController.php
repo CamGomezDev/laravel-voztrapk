@@ -264,7 +264,7 @@ class MapaAntController extends Controller
     if($request->has('idcorp')) {
       $idcorpOrig = $request->get('idcorp');
     } else {
-      $idcorpOrig = Corporacion::first()->id;
+      $idcorpOrig = Corporacion::has('fila_electorals')->first()->id;
     }
 
     $idcorp = DB::connection()->getPdo()->quote($idcorpOrig);
