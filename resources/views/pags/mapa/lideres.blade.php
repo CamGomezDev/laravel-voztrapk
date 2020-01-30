@@ -6,9 +6,6 @@
         <button type="submit" class="btn btn-custom" style="padding-right:7px;padding-left:7px;margin-right:5px"><i class="fa fa-download fa-lg" aria-hidden="true"></i></button>
       </form>
       Líderes en {{$cosa}}
-      <?php $laravel = app();
-      $version = $laravel::VERSION; ?>
-      {{$version}}
     </h4>
     <div class="vcenter-parent pull-right" style="margin-left:auto">
       <input type="text" class="form-control" id="busquedaLideres" placeholder="Buscar"/>

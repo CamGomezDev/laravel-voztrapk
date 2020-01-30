@@ -24,22 +24,27 @@ class UsersController extends AjustesController
 
     if ($request->has('q')) {
       $q = $request->get('q');
-      $usuarios = User::whereHas('rol', function ($query) use ($q) {
-                          $query->where('nombre', 'LIKE', '%'.$q.'%');
-                        })
-                      ->orwhere('name', 'LIKE', '%'.$q.'%')
-                      ->orwhere('email', 'LIKE', '%'.$q.'%')
-                      ->orderBy('name', 'asc')->paginate($rows);
+      // To avoid people deleting root and because i'm too lazy to implement it in search
+      $usuarios = User::where('name', '!=', 'root')->orderBy('name', 'asc')->paginate($rows);
+      $totRows  = User::where('name', '!=', 'root')->count();
+      // $usuarios = User::where('name', '!=', 'root')
+      //                 ->whereHas('rol', function ($query) use ($q) {
+      //                     $query->where('nombre', 'LIKE', '%'.$q.'%');
+      //                   })
+      //                 ->orwhere('name', 'LIKE', '%'.$q.'%')
+      //                 ->orwhere('email', 'LIKE', '%'.$q.'%')
+      //                 ->orderBy('name', 'asc')->paginate($rows);
       
       
-      $totRows = User::whereHas('rol', function ($query) use ($q) {
-                         $query->where('name', 'LIKE', '%'.$q.'%');
-                       })
-                     ->orwhere('name', 'LIKE', '%'.$q.'%')
-                     ->orwhere('email', 'LIKE', '%'.$q.'%')->count();
+      // $totRows = User::where('name', '!=', 'root')
+      //                ->whereHas('rol', function ($query) use ($q) {
+      //                    $query->where('name', 'LIKE', '%'.$q.'%');
+      //                  })
+      //                ->orwhere('name', 'LIKE', '%'.$q.'%')
+      //                ->orwhere('email', 'LIKE', '%'.$q.'%')->count();
     } else {
-      $usuarios = User::orderBy('name', 'asc')->paginate($rows);
-      $totRows  = User::count();
+      $usuarios = User::where('name', '!=', 'root')->orderBy('name', 'asc')->paginate($rows);
+      $totRows  = User::where('name', '!=', 'root')->count();
     }
 
     $roles = Rol::pluck('nombre', 'id');
