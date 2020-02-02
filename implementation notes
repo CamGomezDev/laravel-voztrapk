@@ -25,9 +25,10 @@ After cloning repository:
 - Fill the database by importing the larvoztrapk.sql file from phpmyadmin
 
 - Forr some reason, if error loading resumen in mapaAnt, given the version of Laravel, maybe also do this (last answer of post): https://stackoverflow.com/questions/56726263/compact-undefined-variable-operator
-vendor\laravel\framework\src\Illuminate\Database\Query\Builder.php
-$this->wheres[] = compact('type', 'operator', 'query', 'boolean');
+vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php
+$this->wheres[] = compact('type', 'operator', 'query', 'boolean'); (line 1392)
 remove 'operator'
 
 Start apache server and mysql in xampp and go to larvoztra.pk and it should work
 
+sed -i "s/'type', 'operator'/'type'/" vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php

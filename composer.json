@@ -40,7 +40,8 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan migrate --force"
+            "php artisan migrate --force",
+            "sed -i \"1392s/'operator',//\" vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate"
