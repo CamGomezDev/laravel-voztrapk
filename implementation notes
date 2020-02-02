@@ -31,4 +31,23 @@ remove 'operator'
 
 Start apache server and mysql in xampp and go to larvoztra.pk and it should work
 
-sed -i "s/'type', 'operator'/'type'/" vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php
+
+
+
+For deployment on heroku, locally:
+
+- heroku git:clone -a larvoztrapk (for development on deployment repo)
+- php artisan key:generate --show (copy this)
+- heroku config:set APP_KEY=(paste previous thing) (sets key in .ENV file)
+- Add heroku ClearDB database add-on and uncomment what is commented in config/database.php so that when it runs it connects automatically
+- heroku config:set DB_CONNECTION=heroku_cleardb_mysql_connection (corrects connection in .ENV file)
+- git add ., git commit -m"adf", git push heroku master:
+    - that pushes everything into the server and installs laravel and all necessary packages
+    - it then runs everything on composer.json (post-install-cmd), which is:
+        - it runs all migrations (creates all necessary tables, for which it needs correct credentials in database.php)
+        - it edits the weird Builder.php file on the package that didn't let stuff work
+- If necessary, to run import of the larvoztrapk.sql to the ClearDB database:
+    - heroku config:get CLEARDB_DATABASE_URL to get credentials in the format mysql://user:password@host/heroku_db?reconnect=true
+    - then import with mysql --host=host --user=user --password=pass --reconnect heroku_db < larvoztrapk.sql
+
+Go to heroku app and it should work
