@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'default' => env('personal_heroku_mysql_connection'),
+    'default' => env('DB_CONNECTION', 'heroku_cleardb_mysql_connection'),
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return [
         //     'prefix' => '',
         // ],
 
-        'personal_heroku_mysql_connection' => [
+        'heroku_cleardb_mysql_connection' => [
             'driver' => 'mysql',
             'host' => $host,
             'database' => $database,
