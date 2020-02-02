@@ -1,3 +1,5 @@
+For local development:
+
 After cloning repository:
 - composer install (for installing laravel packages) (remember to install composer, no proxy)
 - npm install (for node packages)
